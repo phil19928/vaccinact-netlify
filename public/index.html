@@ -468,7 +468,330 @@
       display: block;
     }
 
+/* Result Sections */
+    .result-container {
+      display: none;
+      animation: rise 600ms ease both;
+    }
+
+    .result-container.visible {
+      display: block;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .section-title {
+      font-family: "Fraunces", serif;
+      font-size: 24px;
+      margin: 0 0 18px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title .emoji {
+      font-size: 28px;
+    }
+
+    /* Meta Header */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+    }
+
+    .meta-item strong {
+      display: block;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .card-content {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-primary {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .badge-neutral {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    /* Alerts */
+    .alert {
+      border-left: 4px solid;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .alert-danger {
+      background: #fef2f2;
+      border-color: var(--danger);
+      color: #7f1d1d;
+    }
+
+    .alert-warning {
+      background: #fffbeb;
+      border-color: var(--warning);
+      color: #78350f;
+    }
+
+    .alert-info {
+      background: #eff6ff;
+      border-color: var(--info);
+      color: #1e3a8a;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--bg-light);
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #fafaf9;
+    }
+
+    /* Sources */
+    .sources {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .sources-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .source-item {
+      display: block;
+      font-size: 13px;
+      color: var(--light-text);
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    .source-item strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .source-snippet {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* Lists */
+    .bullet-list {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .bullet-list li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Raw JSON Toggle */
+    .json-wrapper {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .json-wrapper.visible {
+      display: block;
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      max-height: 600px;
+    }
+
+    /* Animations */
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .col-12,
+      .col-6,
+      .col-4,
+      .col-3 {
+        grid-column: 1 / -1;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .section-title {
+        font-size: 20px;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    
+        /* Responsive */
     @media (max-width: 768px) {
       body {
         padding: 16px;
@@ -943,7 +1266,75 @@
       </div>
     </div>
 
+  
+
+    <!-- Result Container -->
+    <div id="resultContainer" class="result-container">
+      <!-- Meta Header -->
+      <div class="section" id="metaSection">
+        <h2 class="section-title"><span class="emoji">ℹ️</span> Informations du diagnostic</h2>
+        <div id="metaContent"></div>
+      </div>
+
+      <!-- Recommended Vaccines -->
+      <div class="section" id="vaccinesSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">💉</span> Vaccins recommandés</h2>
+        <div id="vaccinesContent"></div>
+      </div>
+
+      <!-- Catchup Schedule -->
+      <div class="section" id="catchupSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">📅</span> Plan de rattrapage</h2>
+        <div id="catchupContent"></div>
+      </div>
+
+      <!-- Contraindications -->
+      <div class="section" id="contraindicationsSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">⚠️</span> Contre-indications et précautions</h2>
+        <div id="contraindicationsContent"></div>
+      </div>
+
+      <!-- Practical Advice -->
+      <div class="section" id="adviceSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">💡</span> Conseils pratiques</h2>
+        <div id="adviceContent"></div>
+      </div>
+
+      <!-- Patient Report -->
+      <div class="section" id="patientReportSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">👤</span> Résumé pour le patient</h2>
+        <div id="patientReportContent"></div>
+      </div>
+
+      <!-- GP Report -->
+      <div class="section" id="gpReportSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">🩺</span> Résumé pour le médecin traitant</h2>
+        <div id="gpReportContent"></div>
+      </div>
+
+      <!-- Limitations -->
+      <div class="section" id="limitationsSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">⚡</span> Limitations</h2>
+        <div id="limitationsContent"></div>
+      </div>
+
+      <!-- References -->
+      <div class="section" id="referencesSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">📚</span> Sources documentaires</h2>
+        <div id="referencesContent"></div>
+      </div>
+
+      <!-- Raw JSON Toggle -->
+      <div class="section">
+        <button id="toggleJson" class="secondary">Voir JSON brut (debug)</button>
+        <div id="jsonWrapper" class="json-wrapper">
+          <pre id="rawJson"></pre>
+        </div>
+      </div>
+    </div>
   </div>
+
+</div>
 
   <script>
     // ===== MULTI-SELECT COMPONENT =====
@@ -1358,6 +1749,364 @@
         submitBtn.disabled = false;
       }
     });
+
+
+    // === RENDERING FUNCTIONS ===
+
+    function renderDiagnostic(result) {
+      renderMeta(result.meta, result.patient_input_echo);
+      renderRecommendedVaccines(result.recommended_vaccines);
+      renderCatchupSchedule(result.catchup_schedule);
+      renderContraindications(result.contraindications_and_precautions);
+      renderPracticalAdvice(result.practical_advice);
+      renderPatientReport(result.patient_report);
+      renderGPReport(result.gp_report);
+      renderLimitations(result.limitations);
+      renderReferences(result.references);
+    }
+
+    function renderMeta(meta, patientEcho) {
+      const html = `
+          <div class="meta-grid">
+            <div class="meta-item">
+              <strong>Date du diagnostic</strong>
+              <div>${formatDate(meta.diagnostic_date_iso)}</div>
+            </div>
+            <div class="meta-item">
+              <strong>Document source</strong>
+              <div>${meta.source_document}</div>
+            </div>
+            <div class="meta-item">
+              <strong>Version</strong>
+              <div>${meta.version}</div>
+            </div>
+            <div class="meta-item">
+              <strong>Patient</strong>
+              <div>${patientEcho.patient_age_range || "—"} / ${patientEcho.patient_sex || "—"}</div>
+            </div>
+            ${patientEcho.patient_pregnancy_status_or_project
+          ? `<div class="meta-item">
+                    <strong>Grossesse</strong>
+                    <div>${patientEcho.patient_pregnancy_status_or_project}</div>
+                  </div>`
+          : ""
+        }
+            ${patientEcho.patient_profession_risk_exposure
+          ? `<div class="meta-item">
+                    <strong>Profession</strong>
+                    <div>${patientEcho.patient_profession_risk_exposure}</div>
+                  </div>`
+          : ""
+        }
+          </div>
+        `;
+      document.getElementById("metaContent").innerHTML = html;
+    }
+
+    function renderRecommendedVaccines(vaccines) {
+      const section = document.getElementById("vaccinesSection");
+      const content = document.getElementById("vaccinesContent");
+
+      if (!vaccines || vaccines.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = vaccines
+        .map(
+          (v) => `
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">${v.vaccine_name}</h3>
+              ${getBadgeForActType(v.act_type)}
+            </div>
+            <div class="card-content">
+              <p><strong>Timing:</strong> ${v.timing_label}</p>
+              <p><strong>Autorisé en officine:</strong> ${v.allowed_in_pharmacy}</p>
+              <p><strong>Administrable par:</strong> ${v.administerable_by}</p>
+              ${v.vigilance_points && v.vigilance_points.length > 0
+              ? `<p><strong>Points de vigilance:</strong></p>
+                     <ul class="bullet-list">
+                       ${v.vigilance_points.map((vp) => `<li>${vp}</li>`).join("")}
+                     </ul>`
+              : ""
+            }
+              ${renderSources(v.sources)}
+            </div>
+          </div>
+        `
+        )
+        .join("");
+      content.innerHTML = html;
+    }
+
+    function renderCatchupSchedule(schedule) {
+      const section = document.getElementById("catchupSection");
+      const content = document.getElementById("catchupContent");
+
+      if (!schedule || schedule.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = `
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vaccin</th>
+                  <th>Dose</th>
+                  <th>Date proposée</th>
+                  <th>Intervalle min.</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${schedule
+          .map(
+            (item) => `
+                  <tr>
+                    <td><strong>${item.vaccine_name}</strong></td>
+                    <td>Dose ${item.dose_number}</td>
+                    <td>${item.proposed_date_iso
+                ? `<strong style="color: var(--primary)">${formatDate(item.proposed_date_iso)}</strong>`
+                : '<span class="badge badge-warning">À planifier</span>'
+              }</td>
+                    <td>${item.min_interval_days > 0 ? `${item.min_interval_days} jours` : "—"}</td>
+                    <td>
+                      ${item.notes || "—"}
+                      ${renderSources(item.sources, true)}
+                    </td>
+                  </tr>
+                `
+          )
+          .join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      content.innerHTML = html;
+    }
+
+    function renderContraindications(items) {
+      const section = document.getElementById("contraindicationsSection");
+      const content = document.getElementById("contraindicationsContent");
+
+      if (!items || items.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = items
+        .map(
+          (item) => `
+          <div class="${getAlertClass(item.severity)}">
+            <div class="alert-title">
+              ${getBadgeForSeverity(item.severity)} ${item.title}
+            </div>
+            <p>${item.details}</p>
+            ${renderSources(item.sources, true)}
+          </div>
+        `
+        )
+        .join("");
+      content.innerHTML = html;
+    }
+
+    function renderPracticalAdvice(advice) {
+      const section = document.getElementById("adviceSection");
+      const content = document.getElementById("adviceContent");
+
+      if (!advice || advice.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = advice
+        .map(
+          (item) => `
+          <div class="card">
+            <h3 class="card-title">${item.title}</h3>
+            <ul class="bullet-list">
+              ${item.bullets.map((b) => `<li>${b}</li>`).join("")}
+            </ul>
+            ${renderSources(item.sources)}
+          </div>
+        `
+        )
+        .join("");
+      content.innerHTML = html;
+    }
+
+    function renderPatientReport(report) {
+      const section = document.getElementById("patientReportSection");
+      const content = document.getElementById("patientReportContent");
+
+      if (!report || !report.bullets || report.bullets.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = `
+          <div class="card">
+            <h3 class="card-title">${report.title || "Résumé"}</h3>
+            <ul class="bullet-list">
+              ${report.bullets.map((b) => `<li>${b}</li>`).join("")}
+            </ul>
+            ${renderSources(report.sources)}
+          </div>
+        `;
+      content.innerHTML = html;
+    }
+
+    function renderGPReport(report) {
+      const section = document.getElementById("gpReportSection");
+      const content = document.getElementById("gpReportContent");
+
+      if (!report || !report.bullets || report.bullets.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = `
+          <div class="card">
+            <h3 class="card-title">${report.title || "Résumé professionnel"}</h3>
+            <ul class="bullet-list">
+              ${report.bullets.map((b) => `<li>${b}</li>`).join("")}
+            </ul>
+            ${renderSources(report.sources)}
+          </div>
+        `;
+      content.innerHTML = html;
+    }
+
+    function renderLimitations(limitations) {
+      const section = document.getElementById("limitationsSection");
+      const content = document.getElementById("limitationsContent");
+
+      if (!limitations || limitations.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      const html = `
+          <div class="alert alert-warning">
+            <div class="alert-title">Informations non trouvées dans le document source</div>
+            <ul class="bullet-list">
+              ${limitations.map((l) => `<li>${l}</li>`).join("")}
+            </ul>
+          </div>
+        `;
+      content.innerHTML = html;
+    }
+
+    function renderReferences(references) {
+      const section = document.getElementById("referencesSection");
+      const content = document.getElementById("referencesContent");
+
+      if (!references || references.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+
+      // Group by page
+      const byPage = {};
+      references.forEach((ref) => {
+        if (!byPage[ref.page]) byPage[ref.page] = [];
+        byPage[ref.page].push(ref);
+      });
+
+      const html = Object.keys(byPage)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .map((page) => {
+          const refs = byPage[page];
+          return `
+            <div class="card">
+              <h3 class="card-title">Page ${page}</h3>
+              ${refs
+              .map(
+                (ref) => `
+                <div class="source-item">
+                  <strong>${ref.section_hint}:</strong>
+                  <span class="source-snippet">"${ref.snippet}"</span>
+                </div>
+              `
+              )
+              .join("")}
+            </div>
+          `;
+        })
+        .join("");
+
+      content.innerHTML = html;
+    }
+
+    // === HELPER FUNCTIONS ===
+
+    function renderSources(sources, inline = false) {
+      if (!sources || sources.length === 0) return "";
+
+      const items = sources
+        .map(
+          (s) =>
+            `<div class="source-item"><strong>p. ${s.page}</strong> — <span class="source-snippet">"${s.snippet}"</span> <em>(${s.section_hint})</em></div>`
+        )
+        .join("");
+
+      return inline
+        ? `<div style="margin-top: 8px; font-size: 12px; color: var(--light-text);">${items}</div>`
+        : `<div class="sources"><div class="sources-label">Sources</div>${items}</div>`;
+    }
+
+    function formatDate(isoDate) {
+      if (!isoDate) return "—";
+      try {
+        const date = new Date(isoDate);
+        return date.toLocaleDateString("fr-FR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      } catch {
+        return isoDate;
+      }
+    }
+
+    function getBadgeForActType(type) {
+      if (!type) return "";
+      const lower = type.toLowerCase();
+      if (lower.includes("obligatoire")) return '<span class="badge badge-danger">Obligatoire</span>';
+      if (lower.includes("recommandé")) return '<span class="badge badge-primary">Recommandé</span>';
+      if (lower.includes("rattrapage")) return '<span class="badge badge-warning">Rattrapage</span>';
+      return `<span class="badge badge-neutral">${type}</span>`;
+    }
+
+    function getBadgeForSeverity(severity) {
+      if (!severity) return "";
+      const lower = severity.toLowerCase();
+      if (lower.includes("majeure")) return '<span class="badge badge-danger">Contre-indication majeure</span>';
+      if (lower.includes("précaution")) return '<span class="badge badge-warning">Précaution</span>';
+      if (lower.includes("recommandation")) return '<span class="badge badge-info">Recommandation</span>';
+      return `<span class="badge badge-neutral">${severity}</span>`;
+    }
+
+    function getAlertClass(severity) {
+      if (!severity) return "alert alert-info";
+      const lower = severity.toLowerCase();
+      if (lower.includes("majeure")) return "alert alert-danger";
+      if (lower.includes("précaution")) return "alert alert-warning";
+      return "alert alert-info";
+    }
+
   </script>
 </body>
 

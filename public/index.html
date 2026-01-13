@@ -59,13 +59,12 @@
     }
 
     fieldset {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      margin: 14px 0;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin: 20px 0;
       background: #fff;
-      box-shadow: 0 1px 0 rgba(12, 12, 12, 0.03);
-      animation: rise 500ms ease both;
+      box-shadow: var(--shadow-sm);
     }
 
     fieldset:nth-of-type(2) {
@@ -77,14 +76,17 @@
     }
 
     legend {
-      padding: 0 8px;
+      padding: 0 12px;
       font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 12px;
+      gap: 18px;
+      row-gap: 20px;
     }
 
     .col-12 {
@@ -106,8 +108,11 @@
     label {
       display: block;
       font-size: 13px;
+      font-weight: 600;
       color: #2d2d2d;
-      margin: 0 0 6px;
+      margin: 0 0 8px;
+      line-height: 1.4;
+      min-height: 18px;
     }
 
     input[type="text"],
@@ -240,8 +245,11 @@
       }
 
       .grid {
-        grid-template-columns: 1fr;
-      }
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      row-gap: 20px;
+    }
 
       .col-12,
       .col-6,

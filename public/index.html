@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VaccinAct — Prototype</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; max-width: 900px; }
+    textarea, input, select { width: 100%; padding: 10px; margin: 6px 0 14px; }
+    button { padding: 10px 14px; cursor: pointer; }
+    pre { background: #f6f6f6; padding: 12px; overflow: auto; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 700px){ .row{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>VaccinAct — Diagnostic (prototype)</h1>
+  <p>Prototype: formulaire → Netlify Function → OpenAI (file_search + JSON structuré)</p>
+
+  <div class="row">
+    <div>
+      <label>patient_age_range</label>
+      <select id="patient_age_range">
+        <option value="18-25">18-25</option>
+        <option value="26-45" selected>26-45</option>
+        <option value="46-65">46-65</option>
+        <option value="65+">65+</option>
+      </select>
+    </div>
+    <div>
+      <label>patient_sex</label>
+      <select id="patient_sex">
+        <option value="F" selected>F</option>
+        <option value="M">M</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+  </div>
+
+  <label>patient_pregnancy_status_or_project</label>
+  <input id="patient_pregnancy_status_or_project" value="enceinte T2" />
+
+  <label>vax_history_status_uncertainty</label>
+  <input id="vax_history_status_uncertainty" value="carnet perdu" />
+
+  <label>vax_history_doses_count_per_vaccine</label>
+  <input id="vax_history_doses_count_per_vaccine" value="ROR: inconnu" />
+
+  <button id="run">Lancer le diagnostic</button>
+
+  <h2>Résultat (JSON)</h2>
+  <pre id="out">—</pre>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  $("run").addEventListener("click", async () => {
+    $("out").textContent = "En cours…";
+
+    const patient = {
+      patient_age_range: $("patient_age_range").value,
+      patient_sex: $("patient_sex").value,
+      patient_pregnancy_status_or_project: $("patient_pregnancy_status_or_project").value,
+      patient_profession_risk_exposure: "",
+      patient_travel_plan_country_date: "",
+      patient_chronic_conditions_summary: "",
+      patient_current_treatments_summary: "",
+      patient_allergies_history: "",
+      patient_other_general_info: "",
+
+      vax_history_doses_count_per_vaccine: $("vax_history_doses_count_per_vaccine").value,
+      vax_history_last_injection_date_per_vaccine: "",
+      vax_history_tolerance_adverse_events: "",
+      vax_history_status_uncertainty: $("vax_history_status_uncertainty").value,
+      vax_history_vaccines_done_abroad: "non",
+      vax_history_other_flag: false,
+      vax_history_other_details: "",
+      vax_history_how_information_collected_today: "déclaratif",
+
+      contraindications_check_clinical_status_today: "OK",
+      contraindications_check_anticoagulants: "non",
+      contraindications_check_immunosuppressive_or_immunodepression: "non",
+      contraindications_check_severe_allergy_anaphylaxis_history: "non",
+      contraindications_check_severe_post_vaccination_reaction_history: "non",
+      contraindications_check_progressive_uncontrolled_neurological_pathology: "non",
+      contraindications_check_pregnancy_or_postpartum: "enceinte",
+      contraindications_check_other_flag: false,
+      contraindications_check_other_details: "",
+      existing_checklists_or_protocols_used: ""
+    };
+
+    const res = await fetch("/.netlify/functions/diagnostic", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patient })
+    });
+
+    const text = await res.text();
+    $("out").textContent = text;
+  });
+</script>
+</body>
+</html>

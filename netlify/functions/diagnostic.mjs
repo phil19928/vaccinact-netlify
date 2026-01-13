@@ -1,16 +1,12 @@
 import OpenAI from "openai";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const moduleDir =
-  typeof __dirname !== "undefined"
-    ? __dirname
-    : path.dirname(fileURLToPath(import.meta.url));
+// Lambda/Netlify : /var/task est la racine du bundle
+const ROOT = process.env.LAMBDA_TASK_ROOT || process.cwd();
 
-const schema = JSON.parse(
-  readFileSync(path.join(moduleDir, "schema.min.json"), "utf8")
-);
+const schemaPath = path.join(ROOT, "netlify", "functions", "schema.min.json");
+const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
 
 export const handler = async (event) => {
   try {

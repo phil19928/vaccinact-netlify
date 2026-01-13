@@ -1,12 +1,35 @@
 import OpenAI from "openai";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-export default async (req) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const schema = JSON.parse(
+  readFileSync(path.join(__dirname, "schema.min.json"), "utf8")
+);
+
+export const handler = async (event) => {
   try {
-    if (req.method !== "POST") {
-      return new Response("Method Not Allowed", { status: 405 });
+    if (event.httpMethod !== "POST") {
+      return {
+        statusCode: 405,
+        headers: { "Content-Type": "text/plain" },
+        body: "Method Not Allowed",
+      };
     }
 
-    const body = await req.json();
+    let body = null;
+    try {
+      body = event.body ? JSON.parse(event.body) : null;
+    } catch {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Invalid JSON body" }),
+      };
+    }
 
     // Accepte soit { patient: {...} } soit directement {...}
     const patient =
@@ -15,25 +38,23 @@ export default async (req) => {
         : body;
 
     if (!patient || typeof patient !== "object" || Array.isArray(patient)) {
-      return new Response(
-        JSON.stringify({ error: "Missing or invalid patient payload" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Missing or invalid patient payload" }),
+      };
     }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID;
     if (!OPENAI_API_KEY || !VECTOR_STORE_ID) {
-      return new Response(
-        JSON.stringify({ error: "Missing OPENAI_API_KEY or VECTOR_STORE_ID" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          error: "Missing OPENAI_API_KEY or VECTOR_STORE_ID",
+        }),
+      };
     }
 
     const client = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -73,8 +94,6 @@ Sortie:
 - meta.version = "v1"
 - patient_input_echo doit refléter exactement les champs reçus.`;
 
-    // ⚠️ IMPORTANT: colle ici ton JSON Schema complet (celui qui marche déjà)
-    const schema = JSON.parse(process.env.DIAGNOSTIC_SCHEMA_JSON);
 
     // Important: on force file_search à travailler sur ton vector store
     const resp = await client.responses.create({
@@ -120,17 +139,16 @@ Sortie:
       (c) => c.type === "output_text"
     )?.text;
 
-    return new Response(
-      outText ?? JSON.stringify({ error: "No output_text" }),
-      {
-        status: outText ? 200 : 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (e) {
-    return new Response(JSON.stringify({ error: e?.message ?? String(e) }), {
-      status: 500,
+    return {
+      statusCode: outText ? 200 : 500,
       headers: { "Content-Type": "application/json" },
-    });
+      body: outText ?? JSON.stringify({ error: "No output_text" }),
+    };
+  } catch (e) {
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: e?.message ?? String(e) }),
+    };
   }
 };

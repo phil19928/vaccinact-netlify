@@ -3,11 +3,13 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const moduleDir =
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 const schema = JSON.parse(
-  readFileSync(path.join(__dirname, "schema.min.json"), "utf8")
+  readFileSync(path.join(moduleDir, "schema.min.json"), "utf8")
 );
 
 export const handler = async (event) => {

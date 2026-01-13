@@ -4,20 +4,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VaccinAct — Diagnostic (prototype)</title>
+  <title>VaccinAct — Diagnostic</title>
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;500;600;700&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Manrope:wght@400;500;600;700&display=swap");
 
     :root {
-      --max: 1040px;
+      --max: 1200px;
       --bg: #f7f4ef;
       --surface: #fffdf9;
       --ink: #171717;
       --muted: #4c4c4c;
-      --accent: #0f6f5c;
-      --accent-strong: #0b5a4a;
+      --light-text: #6a655d;
+
+      --primary: #0f6f5c;
+      --primary-dark: #0b5a4a;
+      --primary-light: #d1fae5;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --info: #3b82f6;
+
       --border: #e3ded5;
-      --shadow: 0 16px 40px rgba(12, 12, 12, 0.08);
+      --border-light: #eee6dc;
+      --bg-light: #f6f3ee;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 16px 40px rgba(12, 12, 12, 0.08);
     }
 
     * {
@@ -26,60 +43,128 @@
 
     body {
       font-family: "Manrope", sans-serif;
-      margin: 24px;
+      margin: 0;
+      padding: 24px;
       color: var(--ink);
-      background:
-        radial-gradient(900px 420px at 10% -10%,
-          #ffe9bf 0,
-          transparent 60%),
-        radial-gradient(900px 420px at 90% 0%, #d9f3ec 0, transparent 60%),
-        var(--bg);
+      background: radial-gradient(900px 420px at 10% -10%, #ffe9bf 0, transparent 60%),
+        radial-gradient(900px 420px at 90% 0%, #d9f3ec 0, transparent 60%), var(--bg);
+      line-height: 1.6;
     }
 
     .container {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 22px 24px 28px;
+    }
+
+    /* Header */
+    .page-header {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      animation: rise 420ms ease both;
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .logo {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 16px;
     }
 
     h1 {
-      margin: 0 0 6px;
+      margin: 0;
       font-family: "Fraunces", serif;
+      font-size: 32px;
       letter-spacing: 0.2px;
     }
 
-    .sub {
-      margin: 0 0 18px;
+    .required-note {
+      font-size: 13px;
       color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .required-asterisk {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Accordion */
+    .accordion {
+      margin-bottom: 16px;
+    }
+
+    .accordion-header {
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 16px;
+      transition: background 0.2s ease;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: #efe7da;
+    }
+
+    .accordion-header.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    .accordion-icon {
+      transition: transform 0.3s ease;
+      font-size: 20px;
+    }
+
+    .accordion-header.active .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 20px;
+    }
+
+    .accordion-content.active {
+      max-height: 5000px;
+      padding: 24px 20px;
     }
 
     fieldset {
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      margin: 20px 0;
-      background: #fff;
-      box-shadow: var(--shadow-sm);
-    }
-
-    fieldset:nth-of-type(2) {
-      animation-delay: 60ms;
-    }
-
-    fieldset:nth-of-type(3) {
-      animation-delay: 120ms;
+      border: none;
+      padding: 0;
+      margin: 24px 0;
     }
 
     legend {
-      padding: 0 12px;
       font-weight: 700;
-      font-size: 16px;
-      color: var(--ink);
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
     }
 
     .grid {
@@ -107,89 +192,232 @@
 
     label {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
-      color: #2d2d2d;
+      color: var(--ink);
       margin: 0 0 8px;
       line-height: 1.4;
-      min-height: 18px;
     }
 
     input[type="text"],
-    input[type="date"],
+    input[type="month"],
     select,
     textarea {
       width: 100%;
-      padding: 10px;
+      padding: 11px 12px;
       border: 1px solid #d7d0c7;
       border-radius: 10px;
       font-size: 14px;
       background: #fff;
+      font-family: inherit;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    input[type="text"]:focus,
-    input[type="date"]:focus,
+    input:focus,
     select:focus,
     textarea:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(15, 111, 92, 0.18);
     }
 
     textarea {
-      min-height: 90px;
+      min-height: 80px;
       resize: vertical;
     }
 
     .hint {
       font-size: 12px;
-      color: #6a655d;
+      color: var(--light-text);
       margin-top: 6px;
+      line-height: 1.4;
     }
 
-    .row {
+    /* Chips / Tags */
+    .chips-container {
       display: flex;
-      gap: 14px;
       flex-wrap: wrap;
-    }
-
-    .check {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      padding: 10px;
-      border: 1px solid #eee6dc;
+      gap: 8px;
+      margin-bottom: 12px;
+      min-height: 40px;
+      padding: 8px;
+      border: 1px solid #d7d0c7;
       border-radius: 10px;
-      background: #fdfbf6;
+      background: #fff;
     }
 
-    .check input {
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+    }
+
+    .chip-remove {
+      background: none;
+      border: none;
+      color: var(--primary-dark);
+      cursor: pointer;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .chip-remove:hover {
+      color: var(--danger);
+    }
+
+    .chip-dose-select {
+      border: none;
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--primary-dark);
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Multi-select dropdown */
+    .multi-select {
+      position: relative;
+    }
+
+    .multi-select-input {
+      cursor: pointer;
+    }
+
+    .multi-select-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .multi-select-dropdown.active {
+      display: block;
+    }
+
+    .multi-select-option {
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      font-size: 14px;
+    }
+
+    .multi-select-option:hover {
+      background: var(--bg-light);
+    }
+
+    .multi-select-option.selected {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    /* Checkbox group */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: #fafaf9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-item:hover {
+      background: var(--bg-light);
+      border-color: var(--primary);
+    }
+
+    .checkbox-item input[type="checkbox"] {
       width: 18px;
       height: 18px;
+      cursor: pointer;
     }
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin: 16px 0 8px;
+    .checkbox-item label {
+      margin: 0;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
     }
 
+    /* Segmented control (Yes/No/Unknown) */
+    .segmented-control {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .segmented-option {
+      padding: 8px 16px;
+      border: none;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border-right: 1px solid var(--border-light);
+    }
+
+    .segmented-option:last-child {
+      border-right: none;
+    }
+
+    .segmented-option:hover {
+      background: var(--bg-light);
+    }
+
+    .segmented-option.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Buttons */
     button {
-      padding: 11px 14px;
+      padding: 12px 24px;
       border: 0;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       cursor: pointer;
       font-weight: 700;
-      background: var(--accent);
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--primary);
       color: #fffdf8;
       box-shadow: 0 10px 20px rgba(15, 111, 92, 0.2);
       transition: transform 0.15s ease, background 0.2s ease;
     }
 
     button:hover {
-      background: var(--accent-strong);
+      background: var(--primary-dark);
       transform: translateY(-1px);
     }
 
@@ -199,63 +427,70 @@
       transform: none;
     }
 
-    pre {
-      background: #f6f3ee;
-      border: 1px solid #eee6dc;
-      padding: 12px;
-      border-radius: 12px;
+    .btn-secondary {
+      background: #6b7280;
+      box-shadow: 0 10px 20px rgba(107, 114, 128, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 24px 0;
+    }
+
+    .status-text {
+      font-size: 14px;
+      color: var(--light-text);
+      font-weight: 500;
+    }
+
+    /* Payload preview */
+    .payload-preview {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 16px;
+      border-radius: var(--radius-md);
       overflow: auto;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", monospace;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: #efe7da;
+      font-family: ui-monospace, monospace;
       font-size: 12px;
+      line-height: 1.5;
+      max-height: 400px;
+      display: none;
     }
 
-    .divider {
-      height: 1px;
-      background: #eee6dc;
-      margin: 12px 0;
+    .payload-preview.visible {
+      display: block;
     }
 
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 720px) {
+    /* Responsive */
+    @media (max-width: 768px) {
       body {
-        margin: 16px;
-      }
-
-      .container {
-        padding: 18px 16px 22px;
+        padding: 16px;
       }
 
       .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-      row-gap: 20px;
-    }
+        grid-template-columns: 1fr;
+      }
 
       .col-12,
       .col-6,
       .col-4,
       .col-3 {
         grid-column: 1 / -1;
+      }
+
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 24px;
       }
     }
 
@@ -270,494 +505,855 @@
 
 <body>
   <div class="container">
-    <div style="text-align: center; margin-bottom: 16px;">
-      <img src="logo.png" alt="VaccinAct Logo" style="max-width: 200px; height: auto;" />
+    <!-- Header -->
+    <div class="page-header">
+      <img src="logo.png" alt="VaccinAct Logo" class="logo" />
+      <h1>Diagnostic Vaccinal</h1>
+      <p class="required-note"><span class="required-asterisk">*</span> Champs obligatoires</p>
     </div>
-    <h1 style="text-align: center;">Diagnostic Vaccinal</h1>
 
-    <form id="vaccinForm">
-      <!-- SECTION 2 — Infos générales -->
-      <fieldset>
-        <legend>Section 2 — Informations générales patient</legend>
+    <!-- Form -->
+    <div class="form-section">
+      <form id="vaccinForm">
 
-        <div class="grid">
-          <div class="col-4">
-            <label for="patient_age_range">patient_age_range</label>
-            <select id="patient_age_range" name="patient_age_range" required>
-              <option value="">— sélectionner —</option>
-              <option value="0-1">0–1</option>
-              <option value="2-5">2–5</option>
-              <option value="6-17">6–17</option>
-              <option value="18-25">18–25</option>
-              <option value="26-45">26–45</option>
-              <option value="46-65">46–65</option>
-              <option value="65+">65+</option>
-            </select>
+        <!-- SECTION MODE RAPIDE -->
+        <div class="accordion">
+          <div class="accordion-header active" data-target="quick-section">
+            <span>📝 Informations essentielles</span>
+            <span class="accordion-icon">▼</span>
           </div>
+          <div class="accordion-content active" id="quick-section">
+            <div class="grid">
+              <!-- Age -->
+              <div class="col-4">
+                <label for="patient_age_range">Tranche d'âge <span class="required-asterisk">*</span></label>
+                <select id="patient_age_range" required>
+                  <option value="">— Sélectionner —</option>
+                  <option value="0-1">0–1 an</option>
+                  <option value="2-5">2–5 ans</option>
+                  <option value="6-17">6–17 ans</option>
+                  <option value="18-25">18–25 ans</option>
+                  <option value="26-45">26–45 ans</option>
+                  <option value="46-65">46–65 ans</option>
+                  <option value="65+">65+ ans</option>
+                </select>
+              </div>
 
-          <div class="col-4">
-            <label for="patient_sex">patient_sex</label>
-            <select id="patient_sex" name="patient_sex" required>
-              <option value="">— sélectionner —</option>
-              <option value="F">F</option>
-              <option value="M">M</option>
-              <option value="Autre/NSP">Autre/NSP</option>
-            </select>
-          </div>
+              <!-- Sexe -->
+              <div class="col-4">
+                <label for="patient_sex">Sexe <span class="required-asterisk">*</span></label>
+                <select id="patient_sex" required>
+                  <option value="">— Sélectionner —</option>
+                  <option value="F">Féminin</option>
+                  <option value="M">Masculin</option>
+                  <option value="Autre">Autre</option>
+                  <option value="NSP">Non spécifié</option>
+                </select>
+              </div>
 
-          <div class="col-4">
-            <label for="patient_pregnancy_status_or_project">patient_pregnancy_status_or_project</label>
-            <select id="patient_pregnancy_status_or_project" name="patient_pregnancy_status_or_project">
-              <option value="">—</option>
-              <option value="non">non</option>
-              <option value="projet">projet de grossesse</option>
-              <option value="enceinte_T1">enceinte T1</option>
-              <option value="enceinte_T2">enceinte T2</option>
-              <option value="enceinte_T3">enceinte T3</option>
-              <option value="postpartum">post-partum</option>
-            </select>
-            <div class="hint">Si non concerné, laisser vide.</div>
-          </div>
+              <!-- Grossesse -->
+              <div class="col-4">
+                <label for="patient_pregnancy">Statut grossesse</label>
+                <select id="patient_pregnancy">
+                  <option value="">— Sélectionner —</option>
+                  <option value="non">Non</option>
+                  <option value="projet">Projet grossesse</option>
+                  <option value="enceinte_T1">Enceinte T1</option>
+                  <option value="enceinte_T2">Enceinte T2</option>
+                  <option value="enceinte_T3">Enceinte T3</option>
+                  <option value="postpartum">Post-partum</option>
+                  <option value="non_applicable">Non applicable</option>
+                  <option value="inconnu">Inconnu</option>
+                </select>
+              </div>
 
-          <div class="col-6">
-            <label for="patient_profession_risk_exposure">patient_profession_risk_exposure</label>
-            <select id="patient_profession_risk_exposure" name="patient_profession_risk_exposure">
-              <option value="">—</option>
-              <option value="RAS">RAS</option>
-              <option value="soignant">soignant</option>
-              <option value="petite_enfance">petite enfance</option>
-              <option value="laboratoire">laboratoire / biomédical</option>
-              <option value="contact_animaux">contact animaux</option>
-              <option value="autre">
-                autre (préciser dans other_general_info)
-              </option>
-            </select>
-          </div>
+              <!-- Profession multi-select -->
+              <div class="col-12">
+                <label>Profession / Exposition aux risques</label>
+                <div class="chips-container" id="profession-chips"></div>
+                <div class="multi-select">
+                  <input type="text" id="profession-search" class="multi-select-input"
+                    placeholder="Rechercher et sélectionner..." autocomplete="off" />
+                  <div class="multi-select-dropdown" id="profession-dropdown">
+                    <div class="multi-select-option" data-value="soignant">Soignant</div>
+                    <div class="multi-select-option" data-value="creche">Crèche / Petite enfance</div>
+                    <div class="multi-select-option" data-value="ehpad">EHPAD</div>
+                    <div class="multi-select-option" data-value="laboratoire">Laboratoire / Biomédical</div>
+                    <div class="multi-select-option" data-value="voyage_frequent">Voyage fréquent</div>
+                    <div class="multi-select-option" data-value="contact_immuno">Contact immunodéprimés</div>
+                    <div class="multi-select-option" data-value="contact_animaux">Contact animaux</div>
+                    <div class="multi-select-option" data-value="autre">Autre</div>
+                  </div>
+                </div>
+                <input type="text" id="profession-autre" placeholder="Précisez..."
+                  style="display: none; margin-top: 12px;" />
+              </div>
 
-          <div class="col-6">
-            <label for="patient_travel_plan_country_date">patient_travel_plan_country_date</label>
-            <input type="text" id="patient_travel_plan_country_date" name="patient_travel_plan_country_date"
-              placeholder="Ex: Brésil, mars 2026" />
-          </div>
+              <!-- Voyage structuré -->
+              <div class="col-6">
+                <label for="travel-country">Voyage prévu - Pays</label>
+                <input type="text" id="travel-country" placeholder="Ex: Brésil, Thaïlande..." />
+              </div>
 
-          <div class="col-6">
-            <label for="patient_chronic_conditions_summary">patient_chronic_conditions_summary</label>
-            <textarea id="patient_chronic_conditions_summary" name="patient_chronic_conditions_summary"
-              placeholder="Liste synthétique (ex: diabète type 2, asthme…)"></textarea>
-          </div>
-
-          <div class="col-6">
-            <label for="patient_current_treatments_summary">patient_current_treatments_summary</label>
-            <textarea id="patient_current_treatments_summary" name="patient_current_treatments_summary"
-              placeholder="Traitements (ex: immunosuppresseurs, anticoagulants…)"></textarea>
-          </div>
-
-          <div class="col-6">
-            <label for="patient_allergies_history">patient_allergies_history</label>
-            <textarea id="patient_allergies_history" name="patient_allergies_history"
-              placeholder="Allergies médicamenteuses/vaccinales…"></textarea>
-          </div>
-
-          <div class="col-6">
-            <label for="patient_other_general_info">patient_other_general_info</label>
-            <textarea id="patient_other_general_info" name="patient_other_general_info"
-              placeholder="Autres infos pertinentes…"></textarea>
+              <div class="col-6">
+                <label for="travel-date">Voyage prévu - Date approximative</label>
+                <input type="month" id="travel-date" />
+                <div class="hint">
+                  <input type="checkbox" id="no-travel" style="width: auto; margin-right: 6px;" />
+                  <label for="no-travel" style="display: inline; margin: 0; font-weight: normal;">Pas de voyage
+                    prévu</label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="divider"></div>
+        <!-- SECTION VACCINS (Rapide mode amélioré) -->
+        <div class="accordion">
+          <div class="accordion-header active" data-target="vaccines-section">
+            <span>💉 Historique vaccinal</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content active" id="vaccines-section">
+            <div class="grid">
+              <div class="col-12">
+                <label>Vaccins déjà reçus</label>
+                <div class="chips-container" id="vaccines-chips"></div>
+                <div class="multi-select">
+                  <input type="text" id="vaccines-search" class="multi-select-input"
+                    placeholder="Rechercher un vaccin..." autocomplete="off" />
+                  <div class="multi-select-dropdown" id="vaccines-dropdown">
+                    <div class="multi-select-option" data-value="DTP">DTP / dTPolio</div>
+                    <div class="multi-select-option" data-value="dTcaPolio">dTcaPolio (coqueluche)</div>
+                    <div class="multi-select-option" data-value="ROR">ROR (Rougeole-Oreillons-Rubéole)</div>
+                    <div class="multi-select-option" data-value="Hepatite_B">Hépatite B</div>
+                    <div class="multi-select-option" data-value="HPV">HPV (Papillomavirus)</div>
+                    <div class="multi-select-option" data-value="Grippe">Grippe</div>
+                    <div class="multi-select-option" data-value="Covid19">Covid-19</div>
+                    <div class="multi-select-option" data-value="Pneumocoque">Pneumocoque</div>
+                    <div class="multi-select-option" data-value="Meningocoque_ACWY">Méningocoques ACWY</div>
+                    <div class="multi-select-option" data-value="Meningocoque_B">Méningocoques B</div>
+                    <div class="multi-select-option" data-value="Varicelle">Varicelle</div>
+                    <div class="multi-select-option" data-value="Zona">Zona</div>
+                    <div class="multi-select-option" data-value="BCG">BCG</div>
+                    <div class="multi-select-option" data-value="VRS">VRS</div>
+                    <div class="multi-select-option" data-value="Hepatite_A">Hépatite A</div>
+                    <div class="multi-select-option" data-value="Fievre_jaune">Fièvre jaune</div>
+                    <div class="multi-select-option" data-value="Autre">Autre</div>
+                  </div>
+                </div>
+                <div class="hint">Sélectionnez les vaccins, puis indiquez le nombre de doses pour chacun</div>
+              </div>
 
-        <!-- Variante importance -->
-        <div class="grid">
-          <div class="col-12">
-            <div class="hint">
-              <strong>Optionnel :</strong> capturer le niveau d’importance
-              (Indispensable / Utile / Peu utile)
+              <!-- Statut historique -->
+              <div class="col-6">
+                <label for="vax-status">Statut de l'information</label>
+                <select id="vax-status">
+                  <option value="">— Sélectionner —</option>
+                  <option value="carnet_ok">Carnet de vaccination OK</option>
+                  <option value="carnet_perdu">Carnet perdu</option>
+                  <option value="declaratif">Déclaratif</option>
+                  <option value="incertain">Incertain</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+
+              <!-- Source info -->
+              <div class="col-6">
+                <label for="vax-source">Source de l'information</label>
+                <select id="vax-source">
+                  <option value="">— Sélectionner —</option>
+                  <option value="carnet">Carnet de vaccination</option>
+                  <option value="dmp">DMP / Dossier médical</option>
+                  <option value="declaratif">Déclaratif patient</option>
+                  <option value="pharmacie">Historique officine</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+
+              <!-- Vaccins à l'étranger -->
+              <div class="col-6">
+                <label for="vax-abroad">Vaccins réalisés à l'étranger</label>
+                <select id="vax-abroad">
+                  <option value="">— Sélectionner —</option>
+                  <option value="non">Non</option>
+                  <option value="oui">Oui</option>
+                  <option value="inconnu">Inconnu</option>
+                </select>
+              </div>
+
+              <div class="col-6" id="abroad-country-wrapper" style="display: none;">
+                <label for="abroad-country">Pays des vaccinations</label>
+                <input type="text" id="abroad-country" placeholder="Ex: États-Unis, Maroc..." />
+              </div>
+
+              <!-- Tolérance -->
+              <div class="col-6">
+                <label for="vax-tolerance">Tolérance vaccinale</label>
+                <select id="vax-tolerance">
+                  <option value="">— Sélectionner —</option>
+                  <option value="ras">RAS (rien à signaler)</option>
+                  <option value="reaction_locale">Réaction locale</option>
+                  <option value="fievre">Fièvre</option>
+                  <option value="allergie">Allergie</option>
+                  <option value="anaphylaxie">Anaphylaxie</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+
+              <div class="col-6" id="tolerance-details-wrapper" style="display: none;">
+                <label for="tolerance-details">Détails tolérance</label>
+                <input type="text" id="tolerance-details" placeholder="Précisez..." />
+              </div>
             </div>
-          </div>
-
-          <!-- mini helper pour éviter 9 copiés-collés trop longs côté UX : on laisse mais optionnel -->
-          <div class="col-3">
-            <label>importance_patient_age_range</label>
-            <select name="importance_patient_age_range">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_sex</label>
-            <select name="importance_patient_sex">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_pregnancy_status_or_project</label>
-            <select name="importance_patient_pregnancy_status_or_project">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_profession_risk_exposure</label>
-            <select name="importance_patient_profession_risk_exposure">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-
-          <div class="col-3">
-            <label>importance_patient_travel_plan_country_date</label>
-            <select name="importance_patient_travel_plan_country_date">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_chronic_conditions_summary</label>
-            <select name="importance_patient_chronic_conditions_summary">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_current_treatments_summary</label>
-            <select name="importance_patient_current_treatments_summary">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <label>importance_patient_allergies_history</label>
-            <select name="importance_patient_allergies_history">
-              <option value="">—</option>
-              <option>Indispensable</option>
-              <option>Utile</option>
-              <option>Peu utile</option>
-            </select>
-          </div>
-
-          <div class="col-12">
-            <label for="patient_general_info_other_must_collect">patient_general_info_other_must_collect</label>
-            <textarea id="patient_general_info_other_must_collect" name="patient_general_info_other_must_collect"
-              placeholder="Autres infos jugées indispensables à collecter…"></textarea>
           </div>
         </div>
-      </fieldset>
 
-      <!-- SECTION 3 — Historique vaccinal -->
-      <fieldset>
-        <legend>Section 3 — Historique vaccinal</legend>
-
-        <div class="grid">
-          <div class="col-6">
-            <label for="vax_history_doses_count_per_vaccine">vax_history_doses_count_per_vaccine</label>
-            <textarea id="vax_history_doses_count_per_vaccine" name="vax_history_doses_count_per_vaccine"
-              placeholder="Ex: DTP: 3; ROR: 1; HPV: 0; Grippe: annuel…"></textarea>
+        <!-- SECTION CONTEXTE MÉDICAL (Mode Avancé) -->
+        <div class="accordion">
+          <div class="accordion-header" data-target="medical-section">
+            <span>🏥 Contexte médical (optionnel)</span>
+            <span class="accordion-icon">▼</span>
           </div>
+          <div class="accordion-content" id="medical-section">
 
-          <div class="col-6">
-            <label for="vax_history_last_injection_date_per_vaccine">vax_history_last_injection_date_per_vaccine</label>
-            <textarea id="vax_history_last_injection_date_per_vaccine"
-              name="vax_history_last_injection_date_per_vaccine"
-              placeholder="Ex: DTP: 2021-05; ROR: 2002; Covid: 2024-10…"></textarea>
-          </div>
+            <!-- Pathologies chroniques -->
+            <fieldset>
+              <legend>Pathologies chroniques</legend>
+              <div class="checkbox-group" id="chronic-conditions">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-immunodepression" value="immunodépression" />
+                  <label for="cond-immunodepression">Immunodépression</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-asplenie" value="asplénie" />
+                  <label for="cond-asplenie">Asplénie</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-diabete" value="diabète" />
+                  <label for="cond-diabete">Diabète</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-bpco" value="BPCO/asthme sévère" />
+                  <label for="cond-bpco">BPCO / Asthme sévère</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-renal" value="insuffisance rénale" />
+                  <label for="cond-renal">Insuffisance rénale</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-cardio" value="cardiopathie" />
+                  <label for="cond-cardio">Cardiopathie</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-hepatique" value="maladie hépatique" />
+                  <label for="cond-hepatique">Maladie hépatique</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-vih" value="VIH" />
+                  <label for="cond-vih">VIH</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-cancer" value="cancer en traitement" />
+                  <label for="cond-cancer">Cancer en traitement</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cond-greffe" value="greffe" />
+                  <label for="cond-greffe">Greffe</label>
+                </div>
+              </div>
+              <div class="col-12" style="margin-top: 16px;">
+                <input type="text" id="chronic-autre" placeholder="Autre pathologie..." />
+              </div>
+            </fieldset>
 
-          <div class="col-6">
-            <label for="vax_history_tolerance_adverse_events">vax_history_tolerance_adverse_events</label>
-            <textarea id="vax_history_tolerance_adverse_events" name="vax_history_tolerance_adverse_events"
-              placeholder="Ex: RAS / fièvre / réaction locale / allergie…"></textarea>
-          </div>
+            <!-- Traitements -->
+            <fieldset>
+              <legend>Traitements en cours</legend>
+              <div class="checkbox-group" id="treatments">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-immuno" value="immunosuppresseurs" />
+                  <label for="treat-immuno">Immunosuppresseurs</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-cortico" value="corticoïdes prolongés" />
+                  <label for="treat-cortico">Corticoïdes prolongés</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-anticoag" value="anticoagulants" />
+                  <label for="treat-anticoag">Anticoagulants</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-bio" value="biothérapies" />
+                  <label for="treat-bio">Biothérapies</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-chimio" value="chimiothérapie" />
+                  <label for="treat-chimio">Chimiothérapie</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="treat-cd20" value="anti-CD20" />
+                  <label for="treat-cd20">Anti-CD20</label>
+                </div>
+              </div>
+              <div class="col-12" style="margin-top: 16px;">
+                <input type="text" id="treatment-autre" placeholder="Autre traitement..." />
+              </div>
+            </fieldset>
 
-          <div class="col-6">
-            <label for="vax_history_status_uncertainty">vax_history_status_uncertainty</label>
-            <select id="vax_history_status_uncertainty" name="vax_history_status_uncertainty">
-              <option value="">—</option>
-              <option value="aucune">aucune</option>
-              <option value="carnet_perdu">carnet perdu</option>
-              <option value="incomplet">incomplet</option>
-              <option value="incertain">incertain</option>
-              <option value="inconnu">inconnu</option>
-            </select>
-          </div>
+            <!-- Allergies -->
+            <div class="grid">
+              <div class="col-6">
+                <label for="allergies">Allergies</label>
+                <select id="allergies">
+                  <option value="">— Sélectionner —</option>
+                  <option value="aucune">Aucune connue</option>
+                  <option value="medicamenteuse">Allergie médicamenteuse</option>
+                  <option value="vaccinale">Allergie vaccinale</option>
+                  <option value="anaphylaxie">Anaphylaxie</option>
+                  <option value="inconnu">Inconnu</option>
+                </select>
+              </div>
 
-          <div class="col-4">
-            <label for="vax_history_vaccines_done_abroad">vax_history_vaccines_done_abroad</label>
-            <select id="vax_history_vaccines_done_abroad" name="vax_history_vaccines_done_abroad">
-              <option value="">—</option>
-              <option value="non">non</option>
-              <option value="oui">oui</option>
-              <option value="incertain">incertain</option>
-            </select>
-          </div>
+              <div class="col-6" id="allergy-details-wrapper" style="display: none;">
+                <label for="allergy-details">Détails allergies</label>
+                <input type="text" id="allergy-details" placeholder="Précisez..." />
+              </div>
 
-          <div class="col-4">
-            <label class="check">
-              <input type="checkbox" id="vax_history_other_flag" />
-              vax_history_other_flag
-            </label>
-            <div class="hint">
-              Coche si tu as un point “autre” important à préciser.
+              <div class="col-12">
+                <label for="other-info">Autres informations utiles</label>
+                <textarea id="other-info" placeholder="Contexte particulier, antécédents..."></textarea>
+              </div>
             </div>
-          </div>
-
-          <div class="col-4">
-            <label for="vax_history_how_information_collected_today">vax_history_how_information_collected_today</label>
-            <select id="vax_history_how_information_collected_today" name="vax_history_how_information_collected_today">
-              <option value="">—</option>
-              <option value="carnet">carnet / preuve papier</option>
-              <option value="dmp">DMP / dossier</option>
-              <option value="pharma">historique officine</option>
-              <option value="declaratif">déclaratif</option>
-              <option value="autre">autre</option>
-            </select>
-          </div>
-
-          <div class="col-12" id="vax_other_details_wrap" style="display: none">
-            <label for="vax_history_other_details">vax_history_other_details</label>
-            <textarea id="vax_history_other_details" name="vax_history_other_details"
-              placeholder="Décris le point 'autre'…"></textarea>
           </div>
         </div>
-      </fieldset>
 
-      <!-- SECTION 4 — Contre-indications / précautions -->
-      <fieldset>
-        <legend>Section 4 — Contexte / risques / contre-indications</legend>
-
-        <div class="grid">
-          <div class="col-6">
-            <label
-              for="contraindications_check_clinical_status_today">contraindications_check_clinical_status_today</label>
-            <select id="contraindications_check_clinical_status_today"
-              name="contraindications_check_clinical_status_today">
-              <option value="">—</option>
-              <option value="OK">OK</option>
-              <option value="fievre_moderee">fièvre modérée</option>
-              <option value="fievre_severe">fièvre sévère</option>
-              <option value="infection_aigue">infection aiguë</option>
-              <option value="autre">autre</option>
-            </select>
+        <!-- SECTION CONTRE-INDICATIONS (Mode Avancé) -->
+        <div class="accordion">
+          <div class="accordion-header" data-target="ci-section">
+            <span>⚠️ Contre-indications & Précautions (optionnel)</span>
+            <span class="accordion-icon">▼</span>
           </div>
+          <div class="accordion-content" id="ci-section">
+            <div class="grid">
+              <div class="col-12">
+                <label>État clinique aujourd'hui</label>
+                <select id="clinical-status">
+                  <option value="">— Sélectionner —</option>
+                  <option value="OK">OK</option>
+                  <option value="fievre_moderee">Fièvre modérée</option>
+                  <option value="fievre_severe">Fièvre sévère</option>
+                  <option value="infection_aigue">Infection aiguë</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
 
-          <div class="col-6">
-            <label for="existing_checklists_or_protocols_used">existing_checklists_or_protocols_used</label>
-            <input type="text" id="existing_checklists_or_protocols_used" name="existing_checklists_or_protocols_used"
-              placeholder="Ex: protocole interne, HAS, etc." />
-          </div>
+              <!-- Checklist CI avec segmented controls -->
+              <div class="col-12">
+                <fieldset>
+                  <legend>Vérification contre-indications</legend>
 
-          <div class="col-12">
-            <div class="hint">
-              <strong>Checklist rapide</strong> (checkbox → envoyé en
-              'oui'/'non')
+                  <div style="margin-bottom: 16px;">
+                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Anticoagulants</label>
+                    <div class="segmented-control" data-field="ci-anticoag">
+                      <button type="button" class="segmented-option" data-value="non">Non</button>
+                      <button type="button" class="segmented-option active" data-value="oui">Oui</button>
+                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    </div>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Immunosuppression /
+                      Immunodépression</label>
+                    <div class="segmented-control" data-field="ci-immuno">
+                      <button type="button" class="segmented-option active" data-value="non">Non</button>
+                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    </div>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Allergie sévère /
+                      Anaphylaxie</label>
+                    <div class="segmented-control" data-field="ci-allergy">
+                      <button type="button" class="segmented-option active" data-value="non">Non</button>
+                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    </div>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Réaction sévère
+                      post-vaccinale</label>
+                    <div class="segmented-control" data-field="ci-postrxn">
+                      <button type="button" class="segmented-option active" data-value="non">Non</button>
+                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    </div>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Pathologie neurologique
+                      progressive</label>
+                    <div class="segmented-control" data-field="ci-neuro">
+                      <button type="button" class="segmented-option active" data-value="non">Non</button>
+                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="col-12">
+                <label for="protocols-used">Protocoles / Checklists utilisés</label>
+                <input type="text" id="protocols-used" placeholder="Ex: Protocole interne, HAS..." />
+              </div>
             </div>
-            <div class="row">
-              <label class="check"><input type="checkbox" id="contra_anticoagulants" />
-                anticoagulants</label>
-              <label class="check"><input type="checkbox" id="contra_immuno" />
-                immunosuppresseur / immunodépression</label>
-              <label class="check"><input type="checkbox" id="contra_allergy" /> allergie sévère
-                / anaphylaxie</label>
-              <label class="check"><input type="checkbox" id="contra_postrxn" /> réaction sévère
-                post-vaccinale</label>
-              <label class="check"><input type="checkbox" id="contra_neuro" /> neuro progressive
-                non contrôlée</label>
-            </div>
-          </div>
-
-          <div class="col-4">
-            <label class="check">
-              <input type="checkbox" id="contra_other_flag" />
-              contraindications_check_other_flag
-            </label>
-          </div>
-
-          <div class="col-8" id="contra_other_details_wrap" style="display: none">
-            <label for="contraindications_check_other_details">contraindications_check_other_details</label>
-            <input type="text" id="contraindications_check_other_details" name="contraindications_check_other_details"
-              placeholder="Détail 'autre'…" />
-          </div>
-
-          <div class="col-12">
-            <label
-              for="contraindications_check_pregnancy_or_postpartum">contraindications_check_pregnancy_or_postpartum</label>
-            <select id="contraindications_check_pregnancy_or_postpartum"
-              name="contraindications_check_pregnancy_or_postpartum">
-              <option value="">—</option>
-              <option value="non">non</option>
-              <option value="enceinte">enceinte</option>
-              <option value="postpartum">post-partum</option>
-              <option value="projet">projet</option>
-              <option value="NSP">NSP</option>
-            </select>
           </div>
         </div>
-      </fieldset>
 
-      <div class="actions">
-        <button id="submitBtn" type="submit">Lancer le diagnostic</button>
-        <span id="status" class="hint"></span>
+        <!-- Actions -->
+        <div class="actions">
+          <button id="submitBtn" type="submit">🔍 Lancer le diagnostic</button>
+          <button id="previewBtn" type="button" class="btn-secondary">👁️ Aperçu payload</button>
+          <span id="status" class="status-text"></span>
+        </div>
+
+        <!-- Payload Preview -->
+        <div class="accordion" style="margin-top: 20px;">
+          <div class="accordion-header" data-target="payload-section">
+            <span>🔍 Aperçu du payload (debug)</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content" id="payload-section">
+            <pre id="payloadPreview" class="payload-preview"></pre>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Result sections (hidden initially, will be populated after submission) -->
+    <div id="resultContainer" style="display: none;">
+      <!-- Same result sections as before -->
+      <div class="form-section">
+        <h2>✅ Résultat du diagnostic</h2>
+        <pre id="rawResult"
+          style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 12px; overflow: auto; max-height: 600px;"></pre>
       </div>
-    </form>
+    </div>
 
-    <h2>Résultat (JSON)</h2>
-    <pre id="result">—</pre>
   </div>
 
   <script>
-    const form = document.getElementById("vaccinForm");
-    const resultEl = document.getElementById("result");
-    const statusEl = document.getElementById("status");
-    const submitBtn = document.getElementById("submitBtn");
+    // ===== MULTI-SELECT COMPONENT =====
+    class MultiSelect {
+      constructor(searchInputId, dropdownId, chipsContainerId, options = {}) {
+        this.searchInput = document.getElementById(searchInputId);
+        this.dropdown = document.getElementById(dropdownId);
+        this.chipsContainer = document.getElementById(chipsContainerId);
+        this.selectedItems = new Map(); // value => {label, doses}
+        this.showDoses = options.showDoses || false;
 
-    // toggles
-    const vaxOtherFlag = document.getElementById("vax_history_other_flag");
-    const vaxOtherWrap = document.getElementById("vax_other_details_wrap");
+        this.init();
+      }
 
-    const contraOtherFlag = document.getElementById("contra_other_flag");
-    const contraOtherWrap = document.getElementById(
-      "contra_other_details_wrap"
-    );
-
-    vaxOtherFlag.addEventListener("change", () => {
-      vaxOtherWrap.style.display = vaxOtherFlag.checked ? "block" : "none";
-      if (!vaxOtherFlag.checked)
-        document.getElementById("vax_history_other_details").value = "";
-    });
-
-    contraOtherFlag.addEventListener("change", () => {
-      contraOtherWrap.style.display = contraOtherFlag.checked
-        ? "block"
-        : "none";
-      if (!contraOtherFlag.checked)
-        document.getElementById(
-          "contraindications_check_other_details"
-        ).value = "";
-    });
-
-    function checkboxToOuiNon(id) {
-      return document.getElementById(id).checked ? "oui" : "non";
-    }
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      submitBtn.disabled = true;
-      statusEl.textContent = "Appel API en cours…";
-      resultEl.textContent = "…";
-
-      const fd = new FormData(form);
-
-      // IMPORTANT: payload avec EXACTEMENT les clés que tu as listées
-      const payload = {
-        // Infos générales patient
-        patient_age_range: fd.get("patient_age_range") || "",
-        patient_sex: fd.get("patient_sex") || "",
-        patient_pregnancy_status_or_project:
-          fd.get("patient_pregnancy_status_or_project") || "",
-        patient_profession_risk_exposure:
-          fd.get("patient_profession_risk_exposure") || "",
-        patient_travel_plan_country_date:
-          fd.get("patient_travel_plan_country_date") || "",
-        patient_chronic_conditions_summary:
-          fd.get("patient_chronic_conditions_summary") || "",
-        patient_current_treatments_summary:
-          fd.get("patient_current_treatments_summary") || "",
-        patient_allergies_history: fd.get("patient_allergies_history") || "",
-        patient_other_general_info:
-          fd.get("patient_other_general_info") || "",
-
-        // Variante importance (optionnel)
-        importance_patient_age_range:
-          fd.get("importance_patient_age_range") || "",
-        importance_patient_sex: fd.get("importance_patient_sex") || "",
-        importance_patient_pregnancy_status_or_project:
-          fd.get("importance_patient_pregnancy_status_or_project") || "",
-        importance_patient_profession_risk_exposure:
-          fd.get("importance_patient_profession_risk_exposure") || "",
-        importance_patient_travel_plan_country_date:
-          fd.get("importance_patient_travel_plan_country_date") || "",
-        importance_patient_chronic_conditions_summary:
-          fd.get("importance_patient_chronic_conditions_summary") || "",
-        importance_patient_current_treatments_summary:
-          fd.get("importance_patient_current_treatments_summary") || "",
-        importance_patient_allergies_history:
-          fd.get("importance_patient_allergies_history") || "",
-        patient_general_info_other_must_collect:
-          fd.get("patient_general_info_other_must_collect") || "",
-
-        // Section 3 — Historique vaccinal
-        vax_history_doses_count_per_vaccine:
-          fd.get("vax_history_doses_count_per_vaccine") || "",
-        vax_history_last_injection_date_per_vaccine:
-          fd.get("vax_history_last_injection_date_per_vaccine") || "",
-        vax_history_tolerance_adverse_events:
-          fd.get("vax_history_tolerance_adverse_events") || "",
-        vax_history_status_uncertainty:
-          fd.get("vax_history_status_uncertainty") || "",
-        vax_history_vaccines_done_abroad:
-          fd.get("vax_history_vaccines_done_abroad") || "",
-        vax_history_other_flag: vaxOtherFlag.checked,
-        vax_history_other_details: fd.get("vax_history_other_details") || "",
-        vax_history_how_information_collected_today:
-          fd.get("vax_history_how_information_collected_today") || "",
-
-        // Section 4 — Contexte / risques / contre-indications
-        contraindications_check_clinical_status_today:
-          fd.get("contraindications_check_clinical_status_today") || "",
-        contraindications_check_anticoagulants: checkboxToOuiNon(
-          "contra_anticoagulants"
-        ),
-        contraindications_check_immunosuppressive_or_immunodepression:
-          checkboxToOuiNon("contra_immuno"),
-        contraindications_check_severe_allergy_anaphylaxis_history:
-          checkboxToOuiNon("contra_allergy"),
-        contraindications_check_severe_post_vaccination_reaction_history:
-          checkboxToOuiNon("contra_postrxn"),
-        contraindications_check_progressive_uncontrolled_neurological_pathology:
-          checkboxToOuiNon("contra_neuro"),
-        contraindications_check_pregnancy_or_postpartum:
-          fd.get("contraindications_check_pregnancy_or_postpartum") || "",
-        contraindications_check_other_flag: contraOtherFlag.checked,
-        contraindications_check_other_details:
-          fd.get("contraindications_check_other_details") || "",
-        existing_checklists_or_protocols_used:
-          fd.get("existing_checklists_or_protocols_used") || "",
-      };
-
-      try {
-        const r = await fetch("/.netlify/functions/diagnostic", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ patient: payload }),
+      init() {
+        // Toggle dropdown on focus
+        this.searchInput.addEventListener('focus', () => {
+          this.dropdown.classList.add('active');
         });
 
-        const text = await r.text();
-        // Essaye JSON pretty-print si c'est du JSON
-        try {
-          const obj = JSON.parse(text);
-          resultEl.textContent = JSON.stringify(obj, null, 2);
-        } catch {
-          resultEl.textContent = text;
+        // Filter options on type
+        this.searchInput.addEventListener('input', (e) => {
+          this.filterOptions(e.target.value);
+        });
+
+        // Close dropdown on click outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.multi-select')) {
+            this.dropdown.classList.remove('active');
+          }
+        });
+
+        // Handle option selection
+        this.dropdown.querySelectorAll('.multi-select-option').forEach(option => {
+          option.addEventListener('click', (e) => {
+            const value = e.target.dataset.value;
+            const label = e.target.textContent;
+
+            if (this.selectedItems.has(value)) {
+              this.removeItem(value);
+            } else {
+              this.addItem(value, label);
+            }
+
+            this.searchInput.value = '';
+            this.searchInput.focus();
+          });
+        });
+      }
+
+      filterOptions(query) {
+        const lowerQuery = query.toLowerCase();
+        this.dropdown.querySelectorAll('.multi-select-option').forEach(option => {
+          const text = option.textContent.toLowerCase();
+          option.style.display = text.includes(lowerQuery) ? 'block' : 'none';
+        });
+      }
+
+      addItem(value, label) {
+        this.selectedItems.set(value, { label, doses: this.showDoses ? '1' : null });
+        this.renderChips();
+        this.updateDropdownState();
+      }
+
+      removeItem(value) {
+        this.selectedItems.delete(value);
+        this.renderChips();
+        this.updateDropdownState();
+      }
+
+      updateDropdownState() {
+        this.dropdown.querySelectorAll('.multi-select-option').forEach(option => {
+          const value = option.dataset.value;
+          if (this.selectedItems.has(value)) {
+            option.classList.add('selected');
+          } else {
+            option.classList.remove('selected');
+          }
+        });
+      }
+
+      renderChips() {
+        this.chipsContainer.innerHTML = '';
+
+        if (this.selectedItems.size === 0) {
+          this.chipsContainer.innerHTML = '<span style="color: #9ca3af; font-size: 13px;">Aucune sélection</span>';
+          return;
         }
 
-        statusEl.textContent = r.ok ? "OK" : `Erreur HTTP ${r.status}`;
+        this.selectedItems.forEach((data, value) => {
+          const chip = document.createElement('div');
+          chip.className = 'chip';
+
+          let chipHTML = `<span>${data.label}</span>`;
+
+          if (this.showDoses) {
+            chipHTML += `
+              <select class="chip-dose-select" data-vaccine="${value}" onclick="event.stopPropagation()">
+                <option value="0" ${data.doses === '0' ? 'selected' : ''}>0</option>
+                <option value="1" ${data.doses === '1' ? 'selected' : ''}>1</option>
+                <option value="2" ${data.doses === '2' ? 'selected' : ''}>2</option>
+                <option value="3" ${data.doses === '3' ? 'selected' : ''}>3</option>
+                <option value="4" ${data.doses === '4' ? 'selected' : ''}>4</option>
+                <option value="5" ${data.doses === '5' ? 'selected' : ''}>5</option>
+                <option value="6" ${data.doses === '6' ? 'selected' : ''}>6</option>
+                <option value="annuel" ${data.doses === 'annuel' ? 'selected' : ''}>Annuel</option>
+                <option value="inconnu" ${data.doses === 'inconnu' ? 'selected' : ''}>?</option>
+              </select>
+            `;
+          }
+
+          chipHTML += `<button type="button" class="chip-remove" data-value="${value}">×</button>`;
+          chip.innerHTML = chipHTML;
+
+          // Handle dose change
+          if (this.showDoses) {
+            chip.querySelector('.chip-dose-select').addEventListener('change', (e) => {
+              const item = this.selectedItems.get(value);
+              item.doses = e.target.value;
+              this.selectedItems.set(value, item);
+            });
+          }
+
+          // Handle remove
+          chip.querySelector('.chip-remove').addEventListener('click', () => {
+            this.removeItem(value);
+          });
+
+          this.chipsContainer.appendChild(chip);
+        });
+      }
+
+      getSelectedValues() {
+        return Array.from(this.selectedItems.keys());
+      }
+
+      getSelectedWithDoses() {
+        const result = {};
+        this.selectedItems.forEach((data, value) => {
+          result[value] = data.doses || '1';
+        });
+        return result;
+      }
+
+      getFormattedString() {
+        if (this.selectedItems.size === 0) return '';
+
+        const parts = [];
+        this.selectedItems.forEach((data, value) => {
+          if (this.showDoses) {
+            parts.push(`${data.label}: ${data.doses}`);
+          } else {
+            parts.push(data.label);
+          }
+        });
+        return parts.join('; ');
+      }
+    }
+
+    // Initialize components
+    const professionMultiSelect = new MultiSelect(
+      'profession-search',
+      'profession-dropdown',
+      'profession-chips'
+    );
+
+    const vaccinesMultiSelect = new MultiSelect(
+      'vaccines-search',
+      'vaccines-dropdown',
+      'vaccines-chips',
+      { showDoses: true }
+    );
+
+    // ===== ACCORDION =====
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const targetId = header.dataset.target;
+        const content = document.getElementById(targetId);
+        const isActive = header.classList.contains('active');
+
+        header.classList.toggle('active');
+        content.classList.toggle('active');
+      });
+    });
+
+    // ===== SEGMENTED CONTROLS =====
+    document.querySelectorAll('.segmented-control').forEach(control => {
+      control.querySelectorAll('.segmented-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.preventDefault();
+          control.querySelectorAll('.segmented-option').forEach(opt => opt.classList.remove('active'));
+          option.classList.add('active');
+        });
+      });
+    });
+
+    // ===== CONDITIONAL FIELDS =====
+    // Profession autre
+    professionMultiSelect.searchInput.addEventListener('input', () => {
+      const hasAutre = professionMultiSelect.getSelectedValues().includes('autre');
+      document.getElementById('profession-autre').style.display = hasAutre ? 'block' : 'none';
+    });
+
+    // Vaccines abroad country
+    document.getElementById('vax-abroad').addEventListener('change', (e) => {
+      document.getElementById('abroad-country-wrapper').style.display =
+        e.target.value === 'oui' ? 'block' : 'none';
+    });
+
+    // Vaccine tolerance details
+    document.getElementById('vax-tolerance').addEventListener('change', (e) => {
+      const showDetails = ['allergie', 'anaphylaxie', 'autre'].includes(e.target.value);
+      document.getElementById('tolerance-details-wrapper').style.display =
+        showDetails ? 'block' : 'none';
+    });
+
+    // Allergy details
+    document.getElementById('allergies').addEventListener('change', (e) => {
+      const showDetails = !['', 'aucune', 'inconnu'].includes(e.target.value);
+      document.getElementById('allergy-details-wrapper').style.display =
+        showDetails ? 'block' : 'none';
+    });
+
+    // ===== PAYLOAD BUILDER =====
+    function buildPayload() {
+      // Get selected vaccines with doses
+      const vaccinesWithDoses = vaccinesMultiSelect.getSelectedWithDoses();
+      const vaccinesList = Object.keys(vaccinesWithDoses);
+
+      // Build vaccines string
+      const vaccinesStr = vaccinesList.map(v => `${v}: ${vaccinesWithDoses[v]}`).join('; ');
+
+      // Build profession string
+      const professionValues = professionMultiSelect.getSelectedValues();
+      let professionStr = professionValues.filter(v => v !== 'autre').join(', ');
+      const autreProf = document.getElementById('profession-autre').value.trim();
+      if (professionValues.includes('autre') && autreProf) {
+        professionStr += (professionStr ? ', ' : '') + autreProf;
+      }
+      if (!professionStr) professionStr = '';
+
+      // Travel
+      const travelCountry = document.getElementById('travel-country').value.trim();
+      const travelDate = document.getElementById('travel-date').value;
+      const noTravel = document.getElementById('no-travel').checked;
+      let travelStr = '';
+      if (!noTravel && (travelCountry || travelDate)) {
+        const parts = [];
+        if (travelCountry) parts.push(travelCountry);
+        if (travelDate) {
+          const [year, month] = travelDate.split('-');
+          const monthNames = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+          parts.push(`${monthNames[parseInt(month) - 1]} ${year}`);
+        }
+        travelStr = parts.join(', ');
+      }
+
+      // Chronic conditions
+      const chronicChecked = Array.from(document.querySelectorAll('#chronic-conditions input:checked'))
+        .map(cb => cb.value);
+      const chronicAutre = document.getElementById('chronic-autre').value.trim();
+      let chronicStr = chronicChecked.join(', ');
+      if (chronicAutre) {
+        chronicStr += (chronicStr ? ', ' : '') + chronicAutre;
+      }
+
+      // Treatments
+      const treatmentChecked = Array.from(document.querySelectorAll('#treatments input:checked'))
+        .map(cb => cb.value);
+      const treatmentAutre = document.getElementById('treatment-autre').value.trim();
+      let treatmentStr = treatmentChecked.join(', ');
+      if (treatmentAutre) {
+        treatmentStr += (treatmentStr ? ', ' : '') + treatmentAutre;
+      }
+
+      // Allergies
+      const allergyType = document.getElementById('allergies').value;
+      const allergyDetails = document.getElementById('allergy-details').value.trim();
+      let allergyStr = '';
+      if (allergyType && allergyType !== '') {
+        allergyStr = allergyType;
+        if (allergyDetails) allergyStr += ': ' + allergyDetails;
+      }
+
+      // Vaccines abroad
+      const vaxAbroad = document.getElementById('vax-abroad').value;
+      let vaxAbroadStr = vaxAbroad;
+      if (vaxAbroad === 'oui') {
+        const country = document.getElementById('abroad-country').value.trim();
+        if (country) vaxAbroadStr += ' (' + country + ')';
+      }
+
+      // Tolerance
+      const tolerance = document.getElementById('vax-tolerance').value;
+      let toleranceStr = tolerance;
+      if (['allergie', 'anaphylaxie', 'autre'].includes(tolerance)) {
+        const details = document.getElementById('tolerance-details').value.trim();
+        if (details) toleranceStr += ': ' + details;
+      }
+
+      // Segmented controls for CI
+      function getSegmentedValue(field) {
+        const control = document.querySelector(`.segmented-control[data-field="${field}"]`);
+        const active = control?.querySelector('.segmented-option.active');
+        return active?.dataset.value || 'non';
+      }
+
+      const payload = {
+        // Essential info
+        patient_age_range: document.getElementById('patient_age_range').value,
+        patient_sex: document.getElementById('patient_sex').value,
+        patient_pregnancy_status_or_project: document.getElementById('patient_pregnancy').value,
+        patient_profession_risk_exposure: professionStr,
+        patient_travel_plan_country_date: travelStr,
+
+        // Medical context
+        patient_chronic_conditions_summary: chronicStr,
+        patient_current_treatments_summary: treatmentStr,
+        patient_allergies_history: allergyStr,
+        patient_other_general_info: document.getElementById('other-info').value.trim(),
+
+        // Vaccines
+        vax_history_doses_count_per_vaccine: vaccinesStr,
+        vax_history_last_injection_date_per_vaccine: '', // Could be enhanced with date inputs
+        vax_history_tolerance_adverse_events: toleranceStr,
+        vax_history_status_uncertainty: document.getElementById('vax-status').value,
+        vax_history_vaccines_done_abroad: vaxAbroadStr,
+        vax_history_other_flag: false,
+        vax_history_other_details: '',
+        vax_history_how_information_collected_today: document.getElementById('vax-source').value,
+
+        // CI checks
+        contraindications_check_clinical_status_today: document.getElementById('clinical-status').value,
+        contraindications_check_anticoagulants: getSegmentedValue('ci-anticoag'),
+        contraindications_check_immunosuppressive_or_immunodepression: getSegmentedValue('ci-immuno'),
+        contraindications_check_severe_allergy_anaphylaxis_history: getSegmentedValue('ci-allergy'),
+        contraindications_check_severe_post_vaccination_reaction_history: getSegmentedValue('ci-postrxn'),
+        contraindications_check_progressive_uncontrolled_neurological_pathology: getSegmentedValue('ci-neuro'),
+        contraindications_check_pregnancy_or_postpartum: document.getElementById('patient_pregnancy').value,
+        contraindications_check_other_flag: false,
+        contraindications_check_other_details: '',
+        existing_checklists_or_protocols_used: document.getElementById('protocols-used').value.trim(),
+
+        // Importance fields (empty for now, could be added)
+        importance_patient_age_range: '',
+        importance_patient_sex: '',
+        importance_patient_pregnancy_status_or_project: '',
+        importance_patient_profession_risk_exposure: '',
+        importance_patient_travel_plan_country_date: '',
+        importance_patient_chronic_conditions_summary: '',
+        importance_patient_current_treatments_summary: '',
+        importance_patient_allergies_history: '',
+        patient_general_info_other_must_collect: ''
+      };
+
+      return payload;
+    }
+
+    // ===== PREVIEW PAYLOAD =====
+    document.getElementById('previewBtn').addEventListener('click', () => {
+      const payload = buildPayload();
+      const preview = document.getElementById('payloadPreview');
+      preview.textContent = JSON.stringify(payload, null, 2);
+      preview.classList.add('visible');
+
+      // Expand payload section
+      const payloadHeader = document.querySelector('[data-target="payload-section"]');
+      const payloadContent = document.getElementById('payload-section');
+      payloadHeader.classList.add('active');
+      payloadContent.classList.add('active');
+
+      // Scroll to preview
+      preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    // ===== FORM SUBMISSION =====
+    document.getElementById('vaccinForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const statusEl = document.getElementById('status');
+
+      submitBtn.disabled = true;
+      statusEl.textContent = '🔄 Appel en cours...';
+
+      const payload = buildPayload();
+
+      try {
+        const response = await fetch('/.netlify/functions/diagnostic', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ patient: payload })
+        });
+
+        const text = await response.text();
+        let result;
+
+        try {
+          result = JSON.parse(text);
+          document.getElementById('rawResult').textContent = JSON.stringify(result, null, 2);
+          document.getElementById('resultContainer').style.display = 'block';
+          document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+          statusEl.textContent = response.ok ? '✅ Diagnostic terminé' : `❌ Erreur HTTP ${response.status}`;
+        } catch {
+          document.getElementById('rawResult').textContent = text;
+          statusEl.textContent = '❌ Réponse non JSON';
+        }
       } catch (err) {
-        resultEl.textContent = String(err);
-        statusEl.textContent = "Erreur réseau";
+        document.getElementById('rawResult').textContent = String(err);
+        statusEl.textContent = '❌ Erreur réseau';
       } finally {
         submitBtn.disabled = false;
       }

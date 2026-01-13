@@ -468,7 +468,7 @@
       display: block;
     }
 
-/* Result Sections */
+    /* Result Sections */
     .result-container {
       display: none;
       animation: rise 600ms ease both;
@@ -790,8 +790,8 @@
       }
     }
 
-    
-        /* Responsive */
+
+    /* Responsive */
     @media (max-width: 768px) {
       body {
         padding: 16px;
@@ -1256,17 +1256,9 @@
       </form>
     </div>
 
-    <!-- Result sections (hidden initially, will be populated after submission) -->
-    <div id="resultContainer" style="display: none;">
-      <!-- Same result sections as before -->
-      <div class="form-section">
-        <h2>✅ Résultat du diagnostic</h2>
-        <pre id="rawResult"
-          style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 12px; overflow: auto; max-height: 600px;"></pre>
-      </div>
-    </div>
 
-  
+
+
 
     <!-- Result Container -->
     <div id="resultContainer" class="result-container">
@@ -1334,7 +1326,7 @@
     </div>
   </div>
 
-</div>
+  </div>
 
   <script>
     // ===== MULTI-SELECT COMPONENT =====
@@ -1734,16 +1726,25 @@
 
         try {
           result = JSON.parse(text);
-          document.getElementById('rawResult').textContent = JSON.stringify(result, null, 2);
+
+          // Render structured sections
+          renderDiagnostic(result);
+
+          // Also populate raw JSON for debug toggle
+          document.getElementById('rawJson').textContent = JSON.stringify(result, null, 2);
+
+          // Show result container
           document.getElementById('resultContainer').style.display = 'block';
           document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
           statusEl.textContent = response.ok ? '✅ Diagnostic terminé' : `❌ Erreur HTTP ${response.status}`;
         } catch {
-          document.getElementById('rawResult').textContent = text;
+          document.getElementById('rawJson').textContent = text;
+          document.getElementById('resultContainer').style.display = 'block';
           statusEl.textContent = '❌ Réponse non JSON';
         }
       } catch (err) {
-        document.getElementById('rawResult').textContent = String(err);
+        document.getElementById('rawJson').textContent = String(err);
+        document.getElementById('resultContainer').style.display = 'block';
         statusEl.textContent = '❌ Erreur réseau';
       } finally {
         submitBtn.disabled = false;

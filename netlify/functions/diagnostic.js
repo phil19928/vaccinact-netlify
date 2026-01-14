@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import schema from "./schema.min.json";
+import schema from "./schema.min.json" assert { type: "json" };
 
 const systemPrompt = `Tu es un assistant de diagnostic vaccinal basé EXCLUSIVEMENT sur les extraits renvoyés par l'outil file_search (le PDF "Calendrier des vaccinations et recommandations vaccinales"). Interdiction absolue d'utiliser toute connaissance générale, internet ou hypothèse.
 
@@ -77,10 +77,10 @@ function buildSearchQueries(patient) {
     queries.push("Calendrier vaccinal obligatoire recommandé adulte rattrapage doses rappels");
   }
 
-  // Pregnancy-specific queries
+  // Pregnancy-specific queries (only if actually pregnant/planning)
   const pregnancy = patient.patient_pregnancy_status_or_project || '';
   const isPregnant = pregnancy.includes('enceinte') || pregnancy === 'projet' || pregnancy === 'postpartum';
-  if (isPregnant || patient.patient_sex === 'F') {
+  if (isPregnant) {
     queries.push("Vaccination femmes enceintes grossesse coqueluche grippe covid VRS Abrysvo");
   }
 
@@ -89,16 +89,20 @@ function buildSearchQueries(patient) {
   const treatments = patient.patient_current_treatments_summary || '';
   const conditions = patient.patient_chronic_conditions_summary || '';
 
+  // Cache toLowerCase() for performance
+  const treatmentsLower = treatments.toLowerCase();
+  const conditionsLower = conditions.toLowerCase();
+
   const hasImmunoDep =
     immunoCheck === 'oui' ||
-    treatments.toLowerCase().includes('immunosuppres') ||
-    treatments.toLowerCase().includes('corticoïd') ||
-    treatments.toLowerCase().includes('biothérap') ||
-    treatments.toLowerCase().includes('chimio') ||
-    conditions.toLowerCase().includes('immunodép') ||
-    conditions.toLowerCase().includes('vih') ||
-    conditions.toLowerCase().includes('greffe') ||
-    conditions.toLowerCase().includes('asplénie');
+    treatmentsLower.includes('immunosuppres') ||
+    treatmentsLower.includes('corticoïd') ||
+    treatmentsLower.includes('biothérap') ||
+    treatmentsLower.includes('chimio') ||
+    conditionsLower.includes('immunodép') ||
+    conditionsLower.includes('vih') ||
+    conditionsLower.includes('greffe') ||
+    conditionsLower.includes('asplénie');
 
   if (hasImmunoDep) {
     queries.push("Vaccins vivants contre-indications immunodépression immunosuppression");
@@ -113,35 +117,47 @@ function buildSearchQueries(patient) {
 
   // Anticoagulant-specific query
   const anticoag = patient.contraindications_check_anticoagulants || '';
-  if (anticoag === 'oui' || treatments.toLowerCase().includes('anticoag')) {
+  if (anticoag === 'oui' || treatmentsLower.includes('anticoag')) {
     queries.push("Vaccination anticoagulants précautions administration intramusculaire");
   }
 
   // Severe allergies
   const allergies = patient.contraindications_check_severe_allergy_anaphylaxis_history || '';
   const allergyHistory = patient.patient_allergies_history || '';
-  if (allergies === 'oui' || allergyHistory.toLowerCase().includes('anaphyl')) {
+  const allergyHistoryLower = allergyHistory.toLowerCase();
+  if (allergies === 'oui' || allergyHistoryLower.includes('anaphyl')) {
     queries.push("Contre-indications allergies anaphylaxie vaccins");
   }
 
   // Professional exposure risks
   const profession = patient.patient_profession_risk_exposure || '';
-  if (profession.toLowerCase().includes('soignant') ||
-    profession.toLowerCase().includes('creche') ||
-    profession.toLowerCase().includes('ehpad')) {
+  const professionLower = profession.toLowerCase();
+  if (professionLower.includes('soignant') ||
+    professionLower.includes('creche') ||
+    professionLower.includes('ehpad')) {
     queries.push("Vaccination professionnels santé soignants personnel médical");
   }
 
   // Always include intervals query (needed for catchup schedule)
   queries.push("Intervalles délais minimum entre doses rappels vaccins");
 
-  return queries;
+  // Remove duplicates (safety measure)
+  return [...new Set(queries)];
 }
 
 export const handler = async (event) => {
   try {
     if (event.httpMethod !== "POST") {
       return { statusCode: 405, body: "Method Not Allowed" };
+    }
+
+    // Prevent large payload attacks (50KB limit)
+    if (event.body && event.body.length > 50000) {
+      return {
+        statusCode: 413,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Payload too large (max 50KB)" }),
+      };
     }
 
     const body = event.body ? JSON.parse(event.body) : {};
@@ -160,8 +176,14 @@ export const handler = async (event) => {
 
     const client = new OpenAI({ apiKey: OPENAI_API_KEY });
 
-    // Generate current date for meta normalization
-    const diagnosticDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    // Accept optional diagnostic date from frontend (for reproducible testing)
+    // Fallback to current date if not provided or invalid
+    let diagnosticDate = body.diagnostic_date || new Date().toISOString().split('T')[0];
+
+    // Validate date format (YYYY-MM-DD)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(diagnosticDate)) {
+      diagnosticDate = new Date().toISOString().split('T')[0];
+    }
 
     // Build dynamic search queries based on patient context
     const searchQueries = buildSearchQueries(patient);
@@ -206,10 +228,21 @@ export const handler = async (event) => {
       body: outText ?? JSON.stringify({ error: "No output_text" }),
     };
   } catch (e) {
+    // Log error to Netlify function logs for debugging
+    console.error('Diagnostic function error:', {
+      message: e?.message,
+      status: e?.status,
+      type: e?.type,
+      stack: e?.stack
+    });
+
     return {
-      statusCode: 500,
+      statusCode: e?.status || 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: e?.message ?? String(e) }),
+      body: JSON.stringify({
+        error: e?.message ?? String(e),
+        type: e?.type || 'unknown_error'
+      }),
     };
   }
 };

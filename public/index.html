@@ -1752,6 +1752,13 @@
     });
 
 
+    // ===== TOGGLE JSON DEBUG VIEW =====
+    document.getElementById('toggleJson').addEventListener('click', () => {
+      const wrapper = document.getElementById('jsonWrapper');
+      wrapper.classList.toggle('visible');
+    });
+
+
     // === RENDERING FUNCTIONS ===
 
     function renderDiagnostic(result) {

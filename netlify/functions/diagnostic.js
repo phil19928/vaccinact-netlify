@@ -116,7 +116,7 @@ export const handler = async (event) => {
         },
       ],
       temperature: 0,
-      max_output_tokens: 2500, // limite le blabla et accélère
+      max_output_tokens: 16000, // increased to prevent JSON truncation
     });
 
     const outMsg = resp.output?.find((o) => o.type === "message");

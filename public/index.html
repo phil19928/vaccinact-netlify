@@ -31,6 +31,7 @@
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
+      --control-height: 44px;
 
       --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
       --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -200,16 +201,20 @@
     }
 
     input[type="text"],
+    input[type="number"],
+    input[type="date"],
     input[type="month"],
     select,
     textarea {
       width: 100%;
-      padding: 11px 12px;
+      min-height: var(--control-height);
+      padding: 10px 12px;
       border: 1px solid #d7d0c7;
       border-radius: 10px;
       font-size: 14px;
       background: #fff;
       font-family: inherit;
+      line-height: 1.4;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -222,7 +227,8 @@
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 108px;
+      max-height: 260px;
       resize: vertical;
     }
 
@@ -377,6 +383,18 @@
       background: white;
     }
 
+    .ci-check-row {
+      display: grid;
+      grid-template-columns: minmax(230px, 300px) 1fr;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .ci-check-label {
+      margin: 0;
+    }
+
     .segmented-option {
       padding: 8px 16px;
       border: none;
@@ -441,12 +459,43 @@
       gap: 12px;
       align-items: center;
       margin: 24px 0;
+      flex-wrap: wrap;
     }
 
     .status-text {
       font-size: 14px;
       color: var(--light-text);
       font-weight: 500;
+      min-height: 22px;
+    }
+
+    .form-error {
+      display: none;
+      margin-top: -12px;
+      margin-bottom: 18px;
+      padding: 10px 12px;
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #991b1b;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .form-error.visible {
+      display: block;
+    }
+
+    .btn-spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: -2px;
     }
 
     /* Payload preview */
@@ -753,6 +802,12 @@
       }
     }
 
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       body {
@@ -779,6 +834,18 @@
       }
 
       .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        align-items: stretch;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+
+      .ci-check-row {
         grid-template-columns: 1fr;
       }
     }
@@ -1176,8 +1243,8 @@
                 <fieldset>
                   <legend>Vérification contre-indications</legend>
 
-                  <div style="margin-bottom: 16px;">
-                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Anticoagulants</label>
+                  <div class="ci-check-row">
+                    <label class="ci-check-label">Anticoagulants</label>
                     <div class="segmented-control" data-field="ci-anticoag">
                       <button type="button" class="segmented-option" data-value="non">Non</button>
                       <button type="button" class="segmented-option active" data-value="oui">Oui</button>
@@ -1185,8 +1252,8 @@
                     </div>
                   </div>
 
-                  <div style="margin-bottom: 16px;">
-                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Immunosuppression /
+                  <div class="ci-check-row">
+                    <label class="ci-check-label">Immunosuppression /
                       Immunodépression</label>
                     <div class="segmented-control" data-field="ci-immuno">
                       <button type="button" class="segmented-option active" data-value="non">Non</button>
@@ -1195,8 +1262,8 @@
                     </div>
                   </div>
 
-                  <div style="margin-bottom: 16px;">
-                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Allergie sévère /
+                  <div class="ci-check-row">
+                    <label class="ci-check-label">Allergie sévère /
                       Anaphylaxie</label>
                     <div class="segmented-control" data-field="ci-allergy">
                       <button type="button" class="segmented-option active" data-value="non">Non</button>
@@ -1205,8 +1272,8 @@
                     </div>
                   </div>
 
-                  <div style="margin-bottom: 16px;">
-                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Réaction sévère
+                  <div class="ci-check-row">
+                    <label class="ci-check-label">Réaction sévère
                       post-vaccinale</label>
                     <div class="segmented-control" data-field="ci-postrxn">
                       <button type="button" class="segmented-option active" data-value="non">Non</button>
@@ -1215,8 +1282,8 @@
                     </div>
                   </div>
 
-                  <div style="margin-bottom: 16px;">
-                    <label style="display: inline-block; width: 300px; margin-right: 12px;">Pathologie neurologique
+                  <div class="ci-check-row">
+                    <label class="ci-check-label">Pathologie neurologique
                       progressive</label>
                     <div class="segmented-control" data-field="ci-neuro">
                       <button type="button" class="segmented-option active" data-value="non">Non</button>
@@ -1241,6 +1308,7 @@
           <button id="previewBtn" type="button" class="btn-secondary">👁️ Aperçu payload</button>
           <span id="status" class="status-text"></span>
         </div>
+        <div id="formError" class="form-error" role="alert" aria-live="polite"></div>
 
         <!-- Payload Preview -->
         <div class="accordion" style="margin-top: 20px;">
@@ -1702,52 +1770,131 @@
       preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
+    function resolveDiagnosticApiUrl() {
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalHost && window.location.port === '8000') {
+        return `http://${window.location.hostname}:8888/.netlify/functions/diagnostic`;
+      }
+      return '/.netlify/functions/diagnostic';
+    }
+
+    function setSubmitLoading(submitBtn, isLoading) {
+      if (!submitBtn.dataset.defaultLabel) {
+        submitBtn.dataset.defaultLabel = submitBtn.textContent.trim() || 'Lancer le diagnostic';
+      }
+
+      submitBtn.disabled = isLoading;
+      if (isLoading) {
+        submitBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>Diagnostic en cours...';
+      } else {
+        submitBtn.textContent = submitBtn.dataset.defaultLabel;
+      }
+    }
+
+    function setFormError(message) {
+      const errorEl = document.getElementById('formError');
+      if (!errorEl) return;
+
+      const text = String(message || '').trim();
+      if (!text) {
+        errorEl.textContent = '';
+        errorEl.classList.remove('visible');
+        return;
+      }
+
+      errorEl.textContent = text;
+      errorEl.classList.add('visible');
+    }
+
+    function looksLikeJson(text) {
+      const trimmed = String(text || '').trim();
+      return trimmed.startsWith('{') || trimmed.startsWith('[');
+    }
+
+    async function readApiResponse(response) {
+      const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+      const text = await response.text();
+      const shouldTryJson = contentType.includes('application/json') || looksLikeJson(text);
+
+      if (shouldTryJson) {
+        try {
+          return { kind: 'json', data: JSON.parse(text), text, contentType };
+        } catch (parseError) {
+          console.error('Diagnostic JSON parse error:', parseError);
+        }
+      }
+
+      return { kind: 'text', text, contentType };
+    }
+
     // ===== FORM SUBMISSION =====
     document.getElementById('vaccinForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const submitBtn = document.getElementById('submitBtn');
       const statusEl = document.getElementById('status');
+      const resultContainer = document.getElementById('resultContainer');
+      const rawJsonEl = document.getElementById('rawJson');
 
-      submitBtn.disabled = true;
+      setSubmitLoading(submitBtn, true);
+      setFormError('');
       statusEl.textContent = '🔄 Appel en cours...';
 
       const payload = buildPayload();
+      const diagnosticApiUrl = resolveDiagnosticApiUrl();
 
       try {
-        const response = await fetch('/.netlify/functions/diagnostic', {
+        const response = await fetch(diagnosticApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ patient: payload })
         });
 
-        const text = await response.text();
-        let result;
+        const parsed = await readApiResponse(response);
 
-        try {
-          result = JSON.parse(text);
+        if (parsed.kind === 'json') {
+          const result = parsed.data;
 
           // Render structured sections
           renderDiagnostic(result);
 
           // Also populate raw JSON for debug toggle
-          document.getElementById('rawJson').textContent = JSON.stringify(result, null, 2);
+          rawJsonEl.textContent = JSON.stringify(result, null, 2);
 
           // Show result container
-          document.getElementById('resultContainer').style.display = 'block';
-          document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
-          statusEl.textContent = response.ok ? '✅ Diagnostic terminé' : `❌ Erreur HTTP ${response.status}`;
-        } catch {
-          document.getElementById('rawJson').textContent = text;
-          document.getElementById('resultContainer').style.display = 'block';
-          statusEl.textContent = '❌ Réponse non JSON';
+          resultContainer.style.display = 'block';
+          resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+          if (response.ok) {
+            statusEl.textContent = '✅ Diagnostic terminé';
+          } else {
+            const apiError = result?.error || `Erreur HTTP ${response.status}`;
+            statusEl.textContent = `❌ ${apiError}`;
+            setFormError(`Le serveur a répondu avec une erreur: ${apiError}.`);
+          }
+        } else {
+          rawJsonEl.textContent = parsed.text;
+          resultContainer.style.display = 'block';
+          statusEl.textContent = `❌ Réponse non JSON (HTTP ${response.status})`;
+          setFormError(
+            window.location.port === '8000'
+              ? 'Réponse non JSON détectée. Vérifiez que Netlify Dev tourne sur http://localhost:8888.'
+              : 'Réponse serveur non JSON. Consultez les logs de la fonction diagnostic.'
+          );
+          console.error('Non-JSON diagnostic response', {
+            url: diagnosticApiUrl,
+            status: response.status,
+            contentType: parsed.contentType,
+            bodyPreview: String(parsed.text || '').slice(0, 500)
+          });
         }
       } catch (err) {
-        document.getElementById('rawJson').textContent = String(err);
-        document.getElementById('resultContainer').style.display = 'block';
+        rawJsonEl.textContent = String(err);
+        resultContainer.style.display = 'block';
         statusEl.textContent = '❌ Erreur réseau';
+        setFormError(`Impossible de joindre l’API diagnostic (${String(err)}).`);
       } finally {
-        submitBtn.disabled = false;
+        setSubmitLoading(submitBtn, false);
       }
     });
 

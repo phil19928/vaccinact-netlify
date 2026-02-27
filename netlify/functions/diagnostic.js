@@ -1,6 +1,25 @@
 import OpenAI from "openai";
 import schema from "./schema.min.json" assert { type: "json" };
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type"
+};
+
+const JSON_HEADERS = {
+  "Content-Type": "application/json; charset=utf-8",
+  ...CORS_HEADERS
+};
+
+function jsonResponse(statusCode, payload) {
+  return {
+    statusCode,
+    headers: JSON_HEADERS,
+    body: JSON.stringify(payload)
+  };
+}
+
 const systemPrompt = `Tu es un assistant de diagnostic vaccinal basé EXCLUSIVEMENT sur les extraits renvoyés par l'outil file_search (le PDF "Calendrier des vaccinations et recommandations vaccinales"). Interdiction absolue d'utiliser toute connaissance générale, internet ou hypothèse.
 
 RÈGLES ANTI-HALLUCINATION (PRIORITÉ MAXIMALE):
@@ -147,17 +166,21 @@ function buildSearchQueries(patient) {
 
 export const handler = async (event) => {
   try {
+    if (event.httpMethod === "OPTIONS") {
+      return {
+        statusCode: 204,
+        headers: CORS_HEADERS,
+        body: ""
+      };
+    }
+
     if (event.httpMethod !== "POST") {
-      return { statusCode: 405, body: "Method Not Allowed" };
+      return jsonResponse(405, { error: "Method Not Allowed" });
     }
 
     // Prevent large payload attacks (50KB limit)
     if (event.body && event.body.length > 50000) {
-      return {
-        statusCode: 413,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Payload too large (max 50KB)" }),
-      };
+      return jsonResponse(413, { error: "Payload too large (max 50KB)" });
     }
 
     const body = event.body ? JSON.parse(event.body) : {};
@@ -167,11 +190,7 @@ export const handler = async (event) => {
     const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID;
 
     if (!OPENAI_API_KEY || !VECTOR_STORE_ID) {
-      return {
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Missing OPENAI_API_KEY or VECTOR_STORE_ID" }),
-      };
+      return jsonResponse(500, { error: "Missing OPENAI_API_KEY or VECTOR_STORE_ID" });
     }
 
     const client = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -222,11 +241,22 @@ export const handler = async (event) => {
     const outMsg = resp.output?.find((o) => o.type === "message");
     const outText = outMsg?.content?.find((c) => c.type === "output_text")?.text;
 
-    return {
-      statusCode: outText ? 200 : 500,
-      headers: { "Content-Type": "application/json" },
-      body: outText ?? JSON.stringify({ error: "No output_text" }),
-    };
+    if (!outText) {
+      return jsonResponse(500, { error: "No output_text" });
+    }
+
+    let parsedOutput;
+    try {
+      parsedOutput = JSON.parse(outText);
+    } catch (parseError) {
+      console.error("Diagnostic function output parse error:", {
+        message: parseError?.message,
+        outputPreview: String(outText).slice(0, 500),
+      });
+      return jsonResponse(502, { error: "LLM returned non-JSON output" });
+    }
+
+    return jsonResponse(200, parsedOutput);
   } catch (e) {
     // Log error to Netlify function logs for debugging
     console.error('Diagnostic function error:', {
@@ -236,13 +266,9 @@ export const handler = async (event) => {
       stack: e?.stack
     });
 
-    return {
-      statusCode: e?.status || 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        error: e?.message ?? String(e),
-        type: e?.type || 'unknown_error'
-      }),
-    };
+    return jsonResponse(e?.status || 500, {
+      error: e?.message ?? String(e),
+      type: e?.type || "unknown_error"
+    });
   }
 };

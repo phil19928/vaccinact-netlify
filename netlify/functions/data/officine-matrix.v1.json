@@ -1,0 +1,275 @@
+{
+  "rules_version": "v2.0.0",
+  "sources_catalog_version": "v1.0.0",
+  "sources_catalog": {
+    "calendrier-2025-officine": {
+      "title": "Calendrier vaccinal 2025 (version decembre 2025)",
+      "publisher": "Ministere charge de la sante",
+      "document_type": "guide_national",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://sante.gouv.fr/prevention-en-sante/preserver-sa-sante/vaccination/calendrier-vaccinal",
+      "note": "Reference de synthese pour extension officine Covid-19 (>=5 ans)."
+    },
+    "officine-reglementation-hpv": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-pneumocoque": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-hepb": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-ror": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-zona": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-men-acwy": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-men-b": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-dtcapolio": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-reglementation-vrs": {
+      "title": "Arrete du 8 aout 2023 modifie (article 3) - competences vaccinales des pharmaciens d'officine",
+      "publisher": "Legifrance",
+      "document_type": "arrete",
+      "status": "confirmed",
+      "last_verified_at_iso": "2026-02-26",
+      "url": "https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000050746224",
+      "note": "Base juridique consolidee pour vaccination en officine (>=11 ans)."
+    },
+    "officine-matrix-fallback": {
+      "title": "Fallback interne matrice officine",
+      "publisher": "VaccinAct",
+      "document_type": "internal_fallback",
+      "status": "to_confirm",
+      "last_verified_at_iso": "",
+      "url": "",
+      "note": "Utilise uniquement si aucune source explicite n est disponible dans la matrice."
+    }
+  },
+  "entries": {
+    "covid-19": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Calendrier vaccinal 2025 (Dec. 2025) - extension officine Covid-19 >=5 ans",
+      "note": "Confirmer prerequis formation/habilitation locale avant administration.",
+      "references": [
+        {
+          "reference_id": "OFF-COVID-001",
+          "source_id": "calendrier-2025-officine",
+          "section_hint": "Administration en officine - Covid-19",
+          "snippet": "Extension en officine de la vaccination Covid-19 pour les personnes de 5 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 5
+    },
+    "hpv": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-HPV-REG-001",
+          "source_id": "officine-reglementation-hpv",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "pneumocoque": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-PNEUMO-REG-001",
+          "source_id": "officine-reglementation-pneumocoque",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "hepb": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-HEPB-REG-001",
+          "source_id": "officine-reglementation-hepb",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "ror": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus; attention: vaccin vivant attenue, non prescriptible en officine en cas d'immunodepression persistante.",
+      "references": [
+        {
+          "reference_id": "OFF-ROR-REG-001",
+          "source_id": "officine-reglementation-ror",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire les vaccins du calendrier vaccinal en vigueur, sauf vaccins vivants attenues chez les personnes immunodeprimees.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11,
+      "restrictions": [
+        {
+          "type": "risk_flag_true",
+          "flag": "immunodepression",
+          "override_status": "not_allowed",
+          "reason": "Vaccin vivant attenue: prescription officinale non autorisee chez les personnes immunodeprimees."
+        }
+      ]
+    },
+    "zona": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-ZONA-REG-001",
+          "source_id": "officine-reglementation-zona",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "meningocoque acwy": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-MEN-ACWY-REG-001",
+          "source_id": "officine-reglementation-men-acwy",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "meningocoque b": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-MEN-B-REG-001",
+          "source_id": "officine-reglementation-men-b",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "dtcapolio": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-DTCAPOLIO-REG-001",
+          "source_id": "officine-reglementation-dtcapolio",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    },
+    "vrs": {
+      "status": "allowed",
+      "review_status": "confirmed",
+      "source": "Arrete du 8 aout 2023 modifie (art. 3) - pharmaciens d'officine, personnes >=11 ans",
+      "note": "Autorise en officine pour personnes de 11 ans et plus, selon recommandations du calendrier vaccinal en vigueur.",
+      "references": [
+        {
+          "reference_id": "OFF-VRS-REG-001",
+          "source_id": "officine-reglementation-vrs",
+          "section_hint": "Article 3 - competences vaccinales des pharmaciens d'officine",
+          "snippet": "Les pharmaciens d'officine peuvent prescrire et administrer les vaccins du calendrier vaccinal en vigueur pour les personnes de 11 ans et plus.",
+          "status": "confirmed"
+        }
+      ],
+      "min_age_years": 11
+    }
+  }
+}

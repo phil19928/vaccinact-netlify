@@ -1,5 +1,16 @@
 import OpenAI from "openai";
-import schema from "./schema.min.json" assert { type: "json" };
+import schema from "./schema.min.json" with { type: "json" };
+import productDictionary from "./data/product-dictionary.v1.json" with { type: "json" };
+import rulesCatalog from "./data/rules.v1.json" with { type: "json" };
+import officineMatrixData from "./data/officine-matrix.v1.json" with { type: "json" };
+import { normalizeInputV2 } from "./lib/normalizeInput.js";
+import { normalizeIncomingPayload, buildFallbackV2FromLegacy } from "./lib/legacyPatient.js";
+import { mapDeterministicToLegacyResponse } from "./lib/legacyResponseMapper.js";
+import { resolveProductEntries } from "./lib/productDictionary.js";
+import { evaluateRules } from "./lib/rulesEngine.js";
+import { applySafetyGuardrails } from "./lib/safetyGuardrails.js";
+import { applyOfficineMatrix, collectOfficineMatrixLimitations } from "./lib/officineMatrix.js";
+import { composeDeterministicOutput } from "./lib/composeOutput.js";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -29,7 +40,7 @@ RÈGLES ANTI-HALLUCINATION (PRIORITÉ MAXIMALE):
 - Ne pas prescrire: tu synthétises les recommandations du document source uniquement.
 
 RÈGLES DE PERTINENCE CONTEXTUELLE:
-- Analyser le profil patient (sexe, grossesse, âge, profession, voyage) AVANT de remplir les sections.
+- Analyser le profil patient (sexe, grossesse, âge, profession) AVANT de remplir les sections.
 - NE PAS inclure de recommandations/contre-indications liées à la grossesse SI:
   - patient_sex = "M" OU "Autre/NSP"
   - ET patient_pregnancy_status_or_project = "" OU "non"
@@ -81,6 +92,8 @@ STRUCTURE DE SORTIE:
 - references: toutes les sources citées (dédupliquées).
 - limitations: liste claire de ce qui n'a PAS été trouvé dans le PDF.`;
 
+const LEGACY_REQUIRED_FIELDS = schema?.properties?.patient_input_echo?.required ?? [];
+
 /**
  * Build dynamic search queries based on patient context
  * Only search for information that's actually relevant to reduce costs and hallucination
@@ -89,8 +102,8 @@ function buildSearchQueries(patient) {
   const queries = [];
 
   // Always include base calendar query for age-appropriate vaccines
-  const ageRange = patient.patient_age_range || '';
-  if (ageRange.includes('0-1') || ageRange.includes('2-5') || ageRange.includes('6-17')) {
+  const ageYears = Number(patient.patient_age_years);
+  if (Number.isFinite(ageYears) && ageYears < 18) {
     queries.push("Calendrier vaccinal obligatoire recommandé enfant nourrisson rattrapage doses");
   } else {
     queries.push("Calendrier vaccinal obligatoire recommandé adulte rattrapage doses rappels");
@@ -128,10 +141,11 @@ function buildSearchQueries(patient) {
     queries.push("Vaccination patient immunodéprimé recommandations précautions");
   }
 
-  // Travel-related queries
-  const travel = patient.patient_travel_plan_country_date || '';
-  if (travel && travel.length > 3) {
-    queries.push("Vaccinations voyageurs recommandations pays zones endémiques");
+  // Product names from v2 quick mode
+  const entries = Array.isArray(patient.vaccine_history_entries) ? patient.vaccine_history_entries : [];
+  const productNames = [...new Set(entries.map((entry) => entry?.product_name).filter(Boolean))].slice(0, 4);
+  if (productNames.length > 0) {
+    queries.push(`Correspondance vaccins commerciaux antigènes schémas ${productNames.join(" ")}`);
   }
 
   // Anticoagulant-specific query
@@ -184,7 +198,63 @@ export const handler = async (event) => {
     }
 
     const body = event.body ? JSON.parse(event.body) : {};
-    const patient = body.patient ?? body; // accepte {patient: {...}} ou directement {...}
+    const patient = normalizeIncomingPayload(body, LEGACY_REQUIRED_FIELDS);
+    const betaMetrics = body?.beta_metrics || body?.patient?.beta_metrics || body?.patient_v2?.beta_metrics;
+    if (betaMetrics) {
+      console.info("beta_metrics", betaMetrics);
+    }
+
+    const engineMode = String(process.env.DIAGNOSTIC_ENGINE_MODE || "llm").toLowerCase();
+    let diagnosticDate = body.diagnostic_date || new Date().toISOString().split('T')[0];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(diagnosticDate)) {
+      diagnosticDate = new Date().toISOString().split('T')[0];
+    }
+
+    if (engineMode === "deterministic") {
+      const fallbackV2 = buildFallbackV2FromLegacy(patient, diagnosticDate);
+      const normalizedInput = normalizeInputV2(body.patient_v2 || fallbackV2);
+      const resolvedHistory = resolveProductEntries(normalizedInput.vaccine_history_entries, productDictionary);
+      const rulesVersion = rulesCatalog?.rules_version || "v2.0.0";
+      let engineResult = evaluateRules({ normalizedInput, resolvedHistory, rulesVersion });
+      engineResult = applySafetyGuardrails(engineResult, normalizedInput, { resolvedHistory });
+      const officineContext = {
+        patientAgeYears: normalizedInput?.patient?.age_years,
+        riskFlags: normalizedInput?.patient?.risk_flags
+      };
+      engineResult.action_now = applyOfficineMatrix(
+        engineResult.action_now || [],
+        officineMatrixData,
+        officineContext
+      );
+      engineResult.action_next = applyOfficineMatrix(
+        engineResult.action_next || [],
+        officineMatrixData,
+        officineContext
+      );
+      const officineLimitations = collectOfficineMatrixLimitations([
+        ...(engineResult.action_now || []),
+        ...(engineResult.action_next || [])
+      ]);
+      if (officineLimitations.length > 0) {
+        const existingLimitations = Array.isArray(engineResult.limitations) ? engineResult.limitations : [];
+        engineResult.limitations = [...new Set([...existingLimitations, ...officineLimitations])];
+      }
+
+      const deterministicOutput = composeDeterministicOutput({
+        engineResult,
+        diagnosticDateIso: diagnosticDate
+      });
+      const legacyCompatible = mapDeterministicToLegacyResponse({
+        deterministic: deterministicOutput,
+        patient,
+        diagnosticDate
+      });
+
+      return jsonResponse(200, {
+        ...legacyCompatible,
+        deterministic_v2: deterministicOutput
+      });
+    }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID;
@@ -194,15 +264,6 @@ export const handler = async (event) => {
     }
 
     const client = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-    // Accept optional diagnostic date from frontend (for reproducible testing)
-    // Fallback to current date if not provided or invalid
-    let diagnosticDate = body.diagnostic_date || new Date().toISOString().split('T')[0];
-
-    // Validate date format (YYYY-MM-DD)
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(diagnosticDate)) {
-      diagnosticDate = new Date().toISOString().split('T')[0];
-    }
 
     // Build dynamic search queries based on patient context
     const searchQueries = buildSearchQueries(patient);
@@ -253,7 +314,9 @@ export const handler = async (event) => {
         message: parseError?.message,
         outputPreview: String(outText).slice(0, 500),
       });
-      return jsonResponse(502, { error: "LLM returned non-JSON output" });
+      return jsonResponse(502, {
+        error: "LLM returned non-JSON output",
+      });
     }
 
     return jsonResponse(200, parsedOutput);

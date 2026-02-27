@@ -1,0 +1,170 @@
+{
+  "gardasil 9": {
+    "product_id": "gardasil9",
+    "antigens": [
+      "HPV"
+    ],
+    "aliases": [
+      "gardasil9",
+      "gardasil"
+    ]
+  },
+  "engerix b10": {
+    "product_id": "engerix_b10",
+    "antigens": [
+      "HepB"
+    ],
+    "aliases": [
+      "engerix",
+      "engerix b"
+    ]
+  },
+  "hbvaxpro": {
+    "product_id": "hbvaxpro",
+    "antigens": [
+      "HepB"
+    ],
+    "aliases": [
+      "hb vax pro"
+    ]
+  },
+  "priorix": {
+    "product_id": "priorix",
+    "antigens": [
+      "ROR"
+    ],
+    "aliases": [
+      "priorix tetra"
+    ]
+  },
+  "m-m-rvaxpro": {
+    "product_id": "mmrvaxpro",
+    "antigens": [
+      "ROR"
+    ],
+    "aliases": [
+      "mmrvaxpro",
+      "m m rvaxpro"
+    ]
+  },
+  "prevenar13": {
+    "product_id": "prevenar13",
+    "antigens": [
+      "Pneumocoque"
+    ],
+    "aliases": [
+      "prevenar 13"
+    ]
+  },
+  "prevenar20": {
+    "product_id": "prevenar20",
+    "antigens": [
+      "Pneumocoque"
+    ],
+    "aliases": [
+      "prevenar 20"
+    ]
+  },
+  "pneumovax": {
+    "product_id": "pneumovax",
+    "antigens": [
+      "Pneumocoque"
+    ],
+    "aliases": [
+      "pneumo 23"
+    ]
+  },
+  "vaxneuvance": {
+    "product_id": "vaxneuvance",
+    "antigens": [
+      "Pneumocoque"
+    ],
+    "aliases": []
+  },
+  "capvaxive": {
+    "product_id": "capvaxive",
+    "antigens": [
+      "Pneumocoque"
+    ],
+    "aliases": []
+  },
+  "shingrix": {
+    "product_id": "shingrix",
+    "antigens": [
+      "Zona"
+    ],
+    "aliases": []
+  },
+  "abrysvo": {
+    "product_id": "abrysvo",
+    "antigens": [
+      "VRS"
+    ],
+    "aliases": []
+  },
+  "arexvy": {
+    "product_id": "arexvy",
+    "antigens": [
+      "VRS"
+    ],
+    "aliases": []
+  },
+  "mresvia": {
+    "product_id": "mresvia",
+    "antigens": [
+      "VRS"
+    ],
+    "aliases": []
+  },
+  "nimenrix": {
+    "product_id": "nimenrix",
+    "antigens": [
+      "Meningocoque_ACWY"
+    ],
+    "aliases": []
+  },
+  "menquadfi": {
+    "product_id": "menquadfi",
+    "antigens": [
+      "Meningocoque_ACWY"
+    ],
+    "aliases": []
+  },
+  "menveo": {
+    "product_id": "menveo",
+    "antigens": [
+      "Meningocoque_ACWY"
+    ],
+    "aliases": []
+  },
+  "bexsero": {
+    "product_id": "bexsero",
+    "antigens": [
+      "Meningocoque_B"
+    ],
+    "aliases": []
+  },
+  "boostrixtetra": {
+    "product_id": "boostrixtetra",
+    "antigens": [
+      "dTcaPolio"
+    ],
+    "aliases": [
+      "boostrix tetra"
+    ]
+  },
+  "comirnaty": {
+    "product_id": "comirnaty",
+    "antigens": [
+      "Covid19"
+    ],
+    "aliases": []
+  },
+  "spikevax": {
+    "product_id": "spikevax",
+    "antigens": [
+      "Covid19"
+    ],
+    "aliases": []
+  }
+}

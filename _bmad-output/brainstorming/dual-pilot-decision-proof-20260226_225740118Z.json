@@ -1,0 +1,35 @@
+{
+  "generated_at_iso": "2026-02-26T22:57:40.118Z",
+  "endpoints": {
+    "readiness_url": "http://localhost:8888/.netlify/functions/beta-feedback-dual-readiness?window_days=7",
+    "canary_url": "http://localhost:8888/.netlify/functions/beta-feedback-dual-canary-gate?window_days=7&required_windows=2"
+  },
+  "readiness_response": {
+    "ok": false,
+    "status": 400,
+    "payload": {
+      "error": "Primary store mode is not dual. Dual pilot readiness is not applicable.",
+      "primary_store": {
+        "enabled": false,
+        "mode": "http",
+        "ok": true
+      }
+    }
+  },
+  "canary_response": {
+    "ok": false,
+    "status": 400,
+    "payload": {
+      "error": "Primary store mode is not dual. Canary gate is not applicable.",
+      "primary_store": {
+        "enabled": false,
+        "mode": "http",
+        "ok": true
+      }
+    }
+  },
+  "recommendation": {
+    "decision": "not_applicable_or_unavailable",
+    "rationale": "Dual readiness/gate data unavailable or primary mode is not dual."
+  }
+}

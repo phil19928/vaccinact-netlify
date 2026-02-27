@@ -1,0 +1,17 @@
+{
+  "rules_version": "v2.0.0",
+  "status": "skeleton",
+  "domains": [
+    "HPV",
+    "HepB",
+    "ROR",
+    "Covid19",
+    "Pneumocoque",
+    "Zona",
+    "dTcaPolio",
+    "VRS",
+    "Meningocoque_ACWY",
+    "Meningocoque_B"
+  ],
+  "rules": []
+}

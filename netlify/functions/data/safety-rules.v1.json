@@ -1,0 +1,47 @@
+{
+  "rules_version": "v2.0.0",
+  "guardrails": [
+    {
+      "id": "SAFE-ANAPHYLAXIS-001",
+      "trigger": "allergie_severe",
+      "severity": "precaution",
+      "message": "Verification RCP requise avant administration."
+    },
+    {
+      "id": "SAFE-IMMUNODEP-001",
+      "trigger": "immunodepression",
+      "severity": "precaution",
+      "message": "Verifier les regles vaccins vivants attenues."
+    },
+    {
+      "id": "SAFE-CANCER-001",
+      "trigger": "cancer_en_cours",
+      "severity": "precaution",
+      "message": "Verifier l immunodepression iatrogene et la compatibilite vaccinale."
+    },
+    {
+      "id": "SAFE-COMBO-PREG-IMMUNO-001",
+      "trigger": "grossesse_et_immunodepression",
+      "severity": "precaution",
+      "message": "Cas combine a haut risque: validation clinique manuelle requise."
+    },
+    {
+      "id": "SAFE-INCOMPLETE-HISTORY-001",
+      "trigger": "historique_incomplet",
+      "severity": "precaution",
+      "message": "Date de dose manquante: verifier l historique avant interpretation."
+    },
+    {
+      "id": "SAFE-AGE-RANGE-001",
+      "trigger": "age_hors_plage_plausible",
+      "severity": "precaution",
+      "message": "Age incoherent detecte: verifier la saisie."
+    },
+    {
+      "id": "SAFE-PREG-SEX-001",
+      "trigger": "incoherence_sexe_grossesse",
+      "severity": "precaution",
+      "message": "Combinaison sexe/grossesse incoherente: verification manuelle requise."
+    }
+  ]
+}

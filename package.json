@@ -1,10 +1,13 @@
 {
   "name": "vaccinact-netlify",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test \"netlify/functions/lib/__tests__/*.test.mjs\"",
+    "drill:officine:sev1": "node scripts/run-officine-sev1-drill.mjs",
+    "ops:dual:decision": "node scripts/run-dual-pilot-decision.mjs"
   },
   "keywords": [],
   "author": "",

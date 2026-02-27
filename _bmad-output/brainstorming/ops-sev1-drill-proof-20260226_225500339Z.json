@@ -1,0 +1,267 @@
+{
+  "generated_at_iso": "2026-02-26T22:55:00.339Z",
+  "drill_id": "sev1_officine_20260226_225500339Z",
+  "mode": "SEV-1 simulated",
+  "monitor_request": {
+    "url": "http://localhost:8888/.netlify/functions/officine-matrix-monitor?send_webhook=1&send_webhook_on_ok=0&fail_on_alert=0&delivery_mode=signed_webhook&webhook_url=http%3A%2F%2Flocalhost%3A8888%2F.netlify%2Ffunctions%2Fops-drill-receiver%3Fdrill_id%3Dsev1_officine_20260226_225500339Z&now_iso=2027-12-31T00%3A00%3A00.000Z&max_source_age_days=30&stale_source_alert_threshold=0&require_ready_for_regulatory_signoff=1&ops_environment=local-drill&dashboard_url=http%3A%2F%2Flocalhost%3A8888%2Fdashboard%2Fofficine-matrix&runbook_url=http%3A%2F%2Flocalhost%3A8888%2F_bmad-output%2Fbrainstorming%2Fofficine-matrix-monitor-runbook-2026-02-26.md",
+    "monitor_now_iso": "2027-12-31T00:00:00.000Z"
+  },
+  "monitor_response": {
+    "status": 200,
+    "monitor_status": "alert",
+    "alert_reasons": [
+      "Sources stale detectees: 10 (> seuil 0).",
+      "Matrice non prete pour validation reglementaire."
+    ],
+    "delivery": {
+      "enabled": true,
+      "ok": true,
+      "status": 200,
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": 200,
+          "ok": true
+        }
+      ]
+    }
+  },
+  "receiver_proof": {
+    "total_receipts": 1,
+    "latest_receipt": {
+      "received_at_iso": "2026-02-26T22:55:00.419Z",
+      "receipt_id": "drill_rcpt_81bd083b-cba6-4f2a-ae54-44da6838f231",
+      "drill_id": "sev1_officine_20260226_225500339Z",
+      "event_name": "officine_matrix_monitor",
+      "request_id": "01KJE2K8SZR0S00QF0BG1X49H2",
+      "signature_present": false,
+      "payload": {
+        "source": "vaccinact-netlify-officine-matrix-monitor",
+        "sent_at_iso": "2027-12-31T00:00:00.000Z",
+        "batch_id": "officine-matrix-monitor:2027-12-31",
+        "summary": {
+          "monitor_status": "alert",
+          "total_entries": 10,
+          "total_sources_catalog": 11,
+          "status_breakdown": {
+            "allowed": 10
+          },
+          "review_status_breakdown": {
+            "confirmed": 10
+          },
+          "to_confirm_entries_count": 0,
+          "entries_missing_references_count": 0,
+          "confirmed_entries_without_confirmed_reference_count": 0,
+          "missing_source_catalog_refs_count": 0,
+          "stale_source_references_count": 10
+        },
+        "go_no_go": {
+          "status": "no_go"
+        },
+        "archive": {
+          "monitor_status": "alert",
+          "ready_for_regulatory_signoff": false,
+          "thresholds": {
+            "max_source_age_days": 30,
+            "stale_source_alert_threshold": 0,
+            "require_ready_for_regulatory_signoff": true
+          }
+        },
+        "entries": [
+          {
+            "category": "stale_source_reference",
+            "vaccine": "covid-19",
+            "source_id": "calendrier-2025-officine",
+            "rule_id": "OFF-COVID-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "hpv",
+            "source_id": "officine-reglementation-hpv",
+            "rule_id": "OFF-HPV-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "pneumocoque",
+            "source_id": "officine-reglementation-pneumocoque",
+            "rule_id": "OFF-PNEUMO-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "hepb",
+            "source_id": "officine-reglementation-hepb",
+            "rule_id": "OFF-HEPB-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "ror",
+            "source_id": "officine-reglementation-ror",
+            "rule_id": "OFF-ROR-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "zona",
+            "source_id": "officine-reglementation-zona",
+            "rule_id": "OFF-ZONA-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "meningocoque acwy",
+            "source_id": "officine-reglementation-men-acwy",
+            "rule_id": "OFF-MEN-ACWY-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "meningocoque b",
+            "source_id": "officine-reglementation-men-b",
+            "rule_id": "OFF-MEN-B-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "dtcapolio",
+            "source_id": "officine-reglementation-dtcapolio",
+            "rule_id": "OFF-DTCAPOLIO-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          },
+          {
+            "category": "stale_source_reference",
+            "vaccine": "vrs",
+            "source_id": "officine-reglementation-vrs",
+            "rule_id": "OFF-VRS-REG-001",
+            "source_last_verified_at_iso": "2026-02-26",
+            "age_days": 673
+          }
+        ],
+        "monitor": {
+          "generated_at_iso": "2027-12-31T00:00:00.000Z",
+          "status": "alert",
+          "ok": false,
+          "thresholds": {
+            "max_source_age_days": 30,
+            "stale_source_alert_threshold": 0,
+            "require_ready_for_regulatory_signoff": true
+          },
+          "alert_reasons": [
+            "Sources stale detectees: 10 (> seuil 0).",
+            "Matrice non prete pour validation reglementaire."
+          ],
+          "audit": {
+            "generated_at_iso": "2027-12-31T00:00:00.000Z",
+            "matrix_rules_version": "v2.0.0",
+            "sources_catalog_version": "v1.0.0",
+            "max_source_age_days": 30,
+            "ready_for_regulatory_signoff": false,
+            "summary": {
+              "total_entries": 10,
+              "total_sources_catalog": 11,
+              "status_breakdown": {
+                "allowed": 10
+              },
+              "review_status_breakdown": {
+                "confirmed": 10
+              },
+              "to_confirm_entries_count": 0,
+              "entries_missing_references_count": 0,
+              "confirmed_entries_without_confirmed_reference_count": 0,
+              "missing_source_catalog_refs_count": 0,
+              "stale_source_references_count": 10
+            },
+            "unresolved_vaccines": [],
+            "entries_missing_references": [],
+            "confirmed_entries_without_confirmed_reference": [],
+            "missing_source_catalog_references": [],
+            "stale_source_references": [
+              {
+                "vaccine": "covid-19",
+                "source_id": "calendrier-2025-officine",
+                "rule_id": "OFF-COVID-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "hpv",
+                "source_id": "officine-reglementation-hpv",
+                "rule_id": "OFF-HPV-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "pneumocoque",
+                "source_id": "officine-reglementation-pneumocoque",
+                "rule_id": "OFF-PNEUMO-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "hepb",
+                "source_id": "officine-reglementation-hepb",
+                "rule_id": "OFF-HEPB-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "ror",
+                "source_id": "officine-reglementation-ror",
+                "rule_id": "OFF-ROR-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "zona",
+                "source_id": "officine-reglementation-zona",
+                "rule_id": "OFF-ZONA-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "meningocoque acwy",
+                "source_id": "officine-reglementation-men-acwy",
+                "rule_id": "OFF-MEN-ACWY-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "meningocoque b",
+                "source_id": "officine-reglementation-men-b",
+                "rule_id": "OFF-MEN-B-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "dtcapolio",
+                "source_id": "officine-reglementation-dtcapolio",
+                "rule_id": "OFF-DTCAPOLIO-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              },
+              {
+                "vaccine": "vrs",
+                "source_id": "officine-reglementation-vrs",
+                "rule_id": "OFF-VRS-REG-001",
+                "source_last_verified_at_iso": "2026-02-26",
+                "age_days": 673
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

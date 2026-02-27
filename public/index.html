@@ -914,19 +914,10 @@
           </div>
           <div class="accordion-content active" id="quick-section">
             <div class="grid">
-              <!-- Age -->
+              <!-- Age exact -->
               <div class="col-4">
-                <label for="patient_age_range">Tranche d'âge <span class="required-asterisk">*</span></label>
-                <select id="patient_age_range" required>
-                  <option value="">— Sélectionner —</option>
-                  <option value="0-1">0–1 an</option>
-                  <option value="2-5">2–5 ans</option>
-                  <option value="6-17">6–17 ans</option>
-                  <option value="18-25">18–25 ans</option>
-                  <option value="26-45">26–45 ans</option>
-                  <option value="46-65">46–65 ans</option>
-                  <option value="65+">65+ ans</option>
-                </select>
+                <label for="patient_age_years">Âge du patient <span class="required-asterisk">*</span></label>
+                <input type="number" id="patient_age_years" min="0" max="120" step="1" required />
               </div>
 
               <!-- Sexe -->
@@ -969,7 +960,6 @@
                     <div class="multi-select-option" data-value="creche">Crèche / Petite enfance</div>
                     <div class="multi-select-option" data-value="ehpad">EHPAD</div>
                     <div class="multi-select-option" data-value="laboratoire">Laboratoire / Biomédical</div>
-                    <div class="multi-select-option" data-value="voyage_frequent">Voyage fréquent</div>
                     <div class="multi-select-option" data-value="contact_immuno">Contact immunodéprimés</div>
                     <div class="multi-select-option" data-value="contact_animaux">Contact animaux</div>
                     <div class="multi-select-option" data-value="autre">Autre</div>
@@ -977,22 +967,6 @@
                 </div>
                 <input type="text" id="profession-autre" placeholder="Précisez..."
                   style="display: none; margin-top: 12px;" />
-              </div>
-
-              <!-- Voyage structuré -->
-              <div class="col-6">
-                <label for="travel-country">Voyage prévu - Pays</label>
-                <input type="text" id="travel-country" placeholder="Ex: Brésil, Thaïlande..." />
-              </div>
-
-              <div class="col-6">
-                <label for="travel-date">Voyage prévu - Date approximative</label>
-                <input type="month" id="travel-date" />
-                <div class="hint">
-                  <input type="checkbox" id="no-travel" style="width: auto; margin-right: 6px;" />
-                  <label for="no-travel" style="display: inline; margin: 0; font-weight: normal;">Pas de voyage
-                    prévu</label>
-                </div>
               </div>
             </div>
           </div>
@@ -1006,6 +980,33 @@
           </div>
           <div class="accordion-content active" id="vaccines-section">
             <div class="grid">
+              <div class="col-12">
+                <label>Mode rapide officine: nom commercial + date</label>
+                <div class="grid">
+                  <div class="col-5">
+                    <select id="quick-product-name">
+                      <option value="">— Nom commercial —</option>
+                    </select>
+                  </div>
+                  <div class="col-3">
+                    <input type="date" id="quick-product-date" />
+                  </div>
+                  <div class="col-2">
+                    <select id="quick-product-source">
+                      <option value="declaratif">Déclaratif</option>
+                      <option value="carnet">Carnet</option>
+                      <option value="dmp">DMP</option>
+                      <option value="pharmacie">Officine</option>
+                    </select>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" id="quick-product-add" class="btn-secondary" style="width: 100%;">Ajouter</button>
+                  </div>
+                </div>
+                <div class="hint">Ajoutez chaque dose avec sa date réelle. Ce mode alimente `vaccine_history_entries` en v2.</div>
+                <div id="quick-history-list" style="margin-top: 12px;"></div>
+              </div>
+
               <div class="col-12">
                 <label>Vaccins déjà reçus</label>
                 <div class="chips-container" id="vaccines-chips"></div>
@@ -1372,6 +1373,50 @@
         <div id="gpReportContent"></div>
       </div>
 
+      <!-- Deterministic Engine Debug -->
+      <div class="section" id="deterministicSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">🧠</span> Moteur deterministe v2 (debug)</h2>
+        <div id="deterministicContent"></div>
+      </div>
+
+      <!-- Beta KPI Feedback -->
+      <div class="section" id="betaFeedbackSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">📊</span> Feedback beta</h2>
+        <div class="grid">
+          <div class="col-4">
+            <label for="kpi-utility-score">Utilite percue (1-5)</label>
+            <select id="kpi-utility-score">
+              <option value="">— Selectionner —</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <label for="kpi-reuse-intent">Intention de reutilisation</label>
+            <select id="kpi-reuse-intent">
+              <option value="">— Selectionner —</option>
+              <option value="yes">Oui</option>
+              <option value="no">Non</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <label for="kpi-major-corrections">Corrections majeures</label>
+            <input type="number" id="kpi-major-corrections" min="0" step="1" value="0" />
+          </div>
+          <div class="col-12">
+            <button id="saveBetaFeedbackBtn" type="button" class="btn-secondary">Enregistrer feedback local</button>
+            <button id="exportBetaFeedbackJsonBtn" type="button" class="btn-secondary">Exporter JSON</button>
+            <button id="exportBetaFeedbackCsvBtn" type="button" class="btn-secondary">Exporter CSV</button>
+            <button id="pushBetaFeedbackBtn" type="button" class="btn-secondary">Envoyer serveur</button>
+            <button id="clearBetaFeedbackBtn" type="button" class="btn-secondary">Vider stockage local</button>
+            <div id="betaFeedbackStatus" class="hint"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Limitations -->
       <div class="section" id="limitationsSection" style="display: none">
         <h2 class="section-title"><span class="emoji">⚡</span> Limitations</h2>
@@ -1397,6 +1442,57 @@
   </div>
 
   <script>
+    const BETA_FEEDBACK_STORAGE_KEY = 'vaccinact_beta_feedback';
+    let formSessionStartedAt = null;
+    let lastSubmissionMetrics = null;
+    let latestDiagnosticMeta = null;
+
+    function startFormSessionIfNeeded() {
+      if (!formSessionStartedAt) {
+        formSessionStartedAt = Date.now();
+      }
+    }
+
+    function getStoredBetaFeedback() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(BETA_FEEDBACK_STORAGE_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setStoredBetaFeedback(entries) {
+      localStorage.setItem(BETA_FEEDBACK_STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function downloadTextFile(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function toCsvValue(value) {
+      if (value === null || value === undefined) return '';
+      const stringValue = String(value);
+      if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+      return stringValue;
+    }
+
+    function updateBetaFeedbackStatusFromStorage(prefix = '') {
+      const status = document.getElementById('betaFeedbackStatus');
+      const count = getStoredBetaFeedback().length;
+      status.textContent = `${prefix}${prefix ? ' ' : ''}Feedback local: ${count} entree(s).`;
+    }
+
     // ===== MULTI-SELECT COMPONENT =====
     class MultiSelect {
       constructor(searchInputId, dropdownId, chipsContainerId, options = {}) {
@@ -1554,6 +1650,24 @@
       }
     }
 
+    function collectBetaMetrics(legacyPayload, overrides = {}) {
+      const completionSeconds = Number.isFinite(Number(overrides.form_completion_seconds))
+        ? Number(overrides.form_completion_seconds)
+        : null;
+      const ageYears = Number(legacyPayload.patient_age_years);
+
+      return {
+        captured_at_iso: new Date().toISOString(),
+        form_completion_seconds: completionSeconds,
+        form_completed: Boolean(overrides.form_completed),
+        required_core_completed: Number.isFinite(ageYears) && !!legacyPayload.patient_sex,
+        quick_history_entries_count: Array.isArray(legacyPayload.vaccine_history_entries)
+          ? legacyPayload.vaccine_history_entries.length
+          : 0,
+        uncertainty_flag: legacyPayload.vax_history_status_uncertainty || ''
+      };
+    }
+
     // Initialize components
     const professionMultiSelect = new MultiSelect(
       'profession-search',
@@ -1567,6 +1681,104 @@
       'vaccines-chips',
       { showDoses: true }
     );
+
+    const formElement = document.getElementById('vaccinForm');
+    ['input', 'change', 'focusin'].forEach((eventName) => {
+      formElement.addEventListener(eventName, startFormSessionIfNeeded);
+    });
+    startFormSessionIfNeeded();
+
+    // ===== QUICK V2 HISTORY ENTRIES =====
+    const quickHistoryEntries = [];
+    const QUICK_HISTORY_VACCINES = [
+      "Abrysvo",
+      "Bexsero",
+      "Boostrixtetra",
+      "Capvaxine",
+      "Cominarty",
+      "Efluelda",
+      "Engerix B10",
+      "Engerix B20",
+      "Gardasil 9",
+      "Havrix 1440",
+      "Havrix 720",
+      "HBvaxpro 10",
+      "HBvaxpro 5",
+      "Hexyon",
+      "Infanrix hexa",
+      "Infanrix quinta",
+      "Infanrix tetra",
+      "M-M-RVaxpro",
+      "Menquadfi",
+      "Nimenrix",
+      "Pentavac",
+      "Pneumovax",
+      "Prevenar13",
+      "Prevenar20",
+      "Priorix",
+      "Repevax",
+      "Shingrix",
+      "Tetravac acellulaire",
+      "Vaxigrip",
+      "Vaxneuvance"
+    ].sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+
+    function populateQuickProductOptions() {
+      const select = document.getElementById('quick-product-name');
+      const baseOption = `<option value="">— Nom commercial —</option>`;
+      const options = QUICK_HISTORY_VACCINES
+        .map((label) => `<option value="${label}">${label}</option>`)
+        .join('');
+      select.innerHTML = `${baseOption}${options}`;
+    }
+    populateQuickProductOptions();
+
+    function renderQuickHistoryEntries() {
+      const list = document.getElementById('quick-history-list');
+      if (quickHistoryEntries.length === 0) {
+        list.innerHTML = '<div class="hint">Aucune entree rapide.</div>';
+        return;
+      }
+
+      list.innerHTML = quickHistoryEntries.map((entry, index) => `
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px; padding:8px 10px; border:1px solid #e5e7eb; border-radius:10px; background:#fff;">
+          <strong>${entry.product_name}</strong>
+          <span class="hint" style="margin:0;">${entry.administration_date_iso || 'date manquante'}</span>
+          <span class="hint" style="margin:0;">source: ${entry.source || 'declaratif'}</span>
+          <button type="button" data-index="${index}" class="quick-entry-remove btn-secondary" style="margin-left:auto; padding:4px 8px;">Retirer</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.quick-entry-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const index = Number(btn.dataset.index);
+          quickHistoryEntries.splice(index, 1);
+          renderQuickHistoryEntries();
+        });
+      });
+    }
+
+    document.getElementById('quick-product-add').addEventListener('click', () => {
+      const productName = document.getElementById('quick-product-name').value;
+      const dateIso = document.getElementById('quick-product-date').value;
+      const source = document.getElementById('quick-product-source').value || 'declaratif';
+
+      if (!productName || !dateIso) {
+        alert('Renseignez un nom commercial et une date.');
+        return;
+      }
+
+      quickHistoryEntries.push({
+        product_name: productName,
+        administration_date_iso: dateIso,
+        source
+      });
+
+      document.getElementById('quick-product-name').value = '';
+      document.getElementById('quick-product-date').value = '';
+      renderQuickHistoryEntries();
+    });
+    renderQuickHistoryEntries();
 
     // ===== ACCORDION =====
     document.querySelectorAll('.accordion-header').forEach(header => {
@@ -1625,7 +1837,32 @@
       const vaccinesList = Object.keys(vaccinesWithDoses);
 
       // Build vaccines string
-      const vaccinesStr = vaccinesList.map(v => `${v}: ${vaccinesWithDoses[v]}`).join('; ');
+      const doseByName = { ...vaccinesWithDoses };
+      quickHistoryEntries.forEach((entry) => {
+        const existing = doseByName[entry.product_name];
+        if (!existing) {
+          doseByName[entry.product_name] = '1';
+          return;
+        }
+        const parsed = Number.parseInt(existing, 10);
+        if (Number.isFinite(parsed)) {
+          doseByName[entry.product_name] = String(parsed + 1);
+        }
+      });
+      const vaccinesStr = Object.entries(doseByName).map(([vaccine, dose]) => `${vaccine}: ${dose}`).join('; ');
+
+      const lastInjectionByProduct = {};
+      quickHistoryEntries.forEach((entry) => {
+        if (!entry.administration_date_iso) return;
+        if (!lastInjectionByProduct[entry.product_name] || entry.administration_date_iso > lastInjectionByProduct[entry.product_name]) {
+          lastInjectionByProduct[entry.product_name] = entry.administration_date_iso;
+        }
+      });
+      const vaxHistoryLastInjectionDatePerVaccine = Object.entries(lastInjectionByProduct)
+        .map(([vaccine, date]) => `${vaccine}: ${date}`)
+        .join('; ');
+
+      const ageYears = Number.parseInt(document.getElementById('patient_age_years').value, 10);
 
       // Build profession string
       const professionValues = professionMultiSelect.getSelectedValues();
@@ -1635,22 +1872,6 @@
         professionStr += (professionStr ? ', ' : '') + autreProf;
       }
       if (!professionStr) professionStr = '';
-
-      // Travel
-      const travelCountry = document.getElementById('travel-country').value.trim();
-      const travelDate = document.getElementById('travel-date').value;
-      const noTravel = document.getElementById('no-travel').checked;
-      let travelStr = '';
-      if (!noTravel && (travelCountry || travelDate)) {
-        const parts = [];
-        if (travelCountry) parts.push(travelCountry);
-        if (travelDate) {
-          const [year, month] = travelDate.split('-');
-          const monthNames = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
-          parts.push(`${monthNames[parseInt(month) - 1]} ${year}`);
-        }
-        travelStr = parts.join(', ');
-      }
 
       // Chronic conditions
       const chronicChecked = Array.from(document.querySelectorAll('#chronic-conditions input:checked'))
@@ -1704,11 +1925,12 @@
 
       const payload = {
         // Essential info
-        patient_age_range: document.getElementById('patient_age_range').value,
+        patient_age_range: '',
+        patient_age_years: Number.isFinite(ageYears) ? ageYears : null,
         patient_sex: document.getElementById('patient_sex').value,
         patient_pregnancy_status_or_project: document.getElementById('patient_pregnancy').value,
         patient_profession_risk_exposure: professionStr,
-        patient_travel_plan_country_date: travelStr,
+        patient_travel_plan_country_date: '',
 
         // Medical context
         patient_chronic_conditions_summary: chronicStr,
@@ -1718,13 +1940,14 @@
 
         // Vaccines
         vax_history_doses_count_per_vaccine: vaccinesStr,
-        vax_history_last_injection_date_per_vaccine: '', // Could be enhanced with date inputs
+        vax_history_last_injection_date_per_vaccine: vaxHistoryLastInjectionDatePerVaccine,
         vax_history_tolerance_adverse_events: toleranceStr,
         vax_history_status_uncertainty: document.getElementById('vax-status').value,
         vax_history_vaccines_done_abroad: vaxAbroadStr,
         vax_history_other_flag: false,
         vax_history_other_details: '',
         vax_history_how_information_collected_today: document.getElementById('vax-source').value,
+        vaccine_history_entries: quickHistoryEntries.map(entry => ({ ...entry })),
 
         // CI checks
         contraindications_check_clinical_status_today: document.getElementById('clinical-status').value,
@@ -1753,9 +1976,42 @@
       return payload;
     }
 
+    function buildPayloadBundle(metricOverrides = {}) {
+      const legacyPayload = buildPayload();
+      const betaMetrics = collectBetaMetrics(legacyPayload, metricOverrides);
+      legacyPayload.beta_metrics = betaMetrics;
+      const patientV2 = {
+        diagnostic_date_iso: new Date().toISOString().split('T')[0],
+        patient: {
+          age_years: legacyPayload.patient_age_years,
+          sex: legacyPayload.patient_sex,
+          pregnancy_status: legacyPayload.patient_pregnancy_status_or_project,
+          risk_flags: {
+            immunodepression: legacyPayload.contraindications_check_immunosuppressive_or_immunodepression === 'oui',
+            cancer_en_cours: legacyPayload.patient_chronic_conditions_summary.toLowerCase().includes('cancer'),
+            asplenie: legacyPayload.patient_chronic_conditions_summary.toLowerCase().includes('aspl'),
+            dialyse_ou_ir:
+              legacyPayload.patient_chronic_conditions_summary.toLowerCase().includes('insuffisance rénale') ||
+              legacyPayload.patient_chronic_conditions_summary.toLowerCase().includes('insuffisance renale'),
+            vih: legacyPayload.patient_chronic_conditions_summary.toLowerCase().includes('vih'),
+            allergie_severe: legacyPayload.contraindications_check_severe_allergy_anaphylaxis_history === 'oui'
+          }
+        },
+        vaccine_history_entries: legacyPayload.vaccine_history_entries || [],
+        beta_metrics: betaMetrics
+      };
+
+      return {
+        diagnostic_date: patientV2.diagnostic_date_iso,
+        patient: legacyPayload,
+        patient_v2: patientV2,
+        beta_metrics: betaMetrics
+      };
+    }
+
     // ===== PREVIEW PAYLOAD =====
     document.getElementById('previewBtn').addEventListener('click', () => {
-      const payload = buildPayload();
+      const payload = buildPayloadBundle({ form_completed: false });
       const preview = document.getElementById('payloadPreview');
       preview.textContent = JSON.stringify(payload, null, 2);
       preview.classList.add('visible');
@@ -1840,28 +2096,34 @@
       setFormError('');
       statusEl.textContent = '🔄 Appel en cours...';
 
-      const payload = buildPayload();
+      startFormSessionIfNeeded();
+      const completionSeconds = formSessionStartedAt
+        ? Math.max(1, Math.round((Date.now() - formSessionStartedAt) / 1000))
+        : null;
+      const payload = buildPayloadBundle({
+        form_completed: true,
+        form_completion_seconds: completionSeconds
+      });
+      lastSubmissionMetrics = payload.beta_metrics;
+
       const diagnosticApiUrl = resolveDiagnosticApiUrl();
 
       try {
         const response = await fetch(diagnosticApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ patient: payload })
+          body: JSON.stringify(payload)
         });
 
         const parsed = await readApiResponse(response);
 
         if (parsed.kind === 'json') {
           const result = parsed.data;
+          latestDiagnosticMeta = result?.meta || null;
 
-          // Render structured sections
           renderDiagnostic(result);
-
-          // Also populate raw JSON for debug toggle
+          renderBetaFeedbackSection();
           rawJsonEl.textContent = JSON.stringify(result, null, 2);
-
-          // Show result container
           resultContainer.style.display = 'block';
           resultContainer.scrollIntoView({ behavior: 'smooth' });
 
@@ -1898,6 +2160,140 @@
       }
     });
 
+    document.getElementById('saveBetaFeedbackBtn').addEventListener('click', () => {
+      const utilityScoreRaw = document.getElementById('kpi-utility-score').value;
+      const reuseIntent = document.getElementById('kpi-reuse-intent').value;
+      const majorCorrectionsRaw = document.getElementById('kpi-major-corrections').value;
+      const status = document.getElementById('betaFeedbackStatus');
+
+      const utilityScore = utilityScoreRaw ? Number(utilityScoreRaw) : null;
+      const majorCorrections = Number.parseInt(majorCorrectionsRaw || '0', 10);
+
+      if (!utilityScore || !reuseIntent) {
+        status.textContent = 'Renseignez utilite percue et intention de reutilisation.';
+        return;
+      }
+
+      const feedbackEntry = {
+        recorded_at_iso: new Date().toISOString(),
+        diagnostic_meta: latestDiagnosticMeta || {},
+        submission_metrics: lastSubmissionMetrics || {},
+        utility_score: utilityScore,
+        reuse_intent: reuseIntent,
+        major_corrections_count: Number.isFinite(majorCorrections) ? Math.max(0, majorCorrections) : 0
+      };
+
+      try {
+        const existing = getStoredBetaFeedback();
+        existing.push(feedbackEntry);
+        setStoredBetaFeedback(existing);
+        status.textContent = `Feedback enregistre localement (${existing.length} entree(s)).`;
+      } catch (error) {
+        status.textContent = `Erreur sauvegarde feedback: ${String(error)}`;
+      }
+    });
+
+    document.getElementById('exportBetaFeedbackJsonBtn').addEventListener('click', () => {
+      const entries = getStoredBetaFeedback();
+      if (entries.length === 0) {
+        updateBetaFeedbackStatusFromStorage('Aucune donnee a exporter.');
+        return;
+      }
+      const content = JSON.stringify(entries, null, 2);
+      downloadTextFile(`vaccinact-beta-feedback-${new Date().toISOString().slice(0, 10)}.json`, content, 'application/json');
+      updateBetaFeedbackStatusFromStorage('Export JSON termine.');
+    });
+
+    document.getElementById('exportBetaFeedbackCsvBtn').addEventListener('click', () => {
+      const entries = getStoredBetaFeedback();
+      if (entries.length === 0) {
+        updateBetaFeedbackStatusFromStorage('Aucune donnee a exporter.');
+        return;
+      }
+
+      const headers = [
+        'recorded_at_iso',
+        'diagnostic_date_iso',
+        'version',
+        'utility_score',
+        'reuse_intent',
+        'major_corrections_count',
+        'form_completion_seconds',
+        'form_completed',
+        'quick_history_entries_count',
+        'required_core_completed'
+      ];
+
+      const lines = [headers.join(',')];
+      entries.forEach((entry) => {
+        const row = [
+          entry.recorded_at_iso,
+          entry.diagnostic_meta?.diagnostic_date_iso || '',
+          entry.diagnostic_meta?.version || '',
+          entry.utility_score,
+          entry.reuse_intent,
+          entry.major_corrections_count,
+          entry.submission_metrics?.form_completion_seconds ?? '',
+          entry.submission_metrics?.form_completed ?? '',
+          entry.submission_metrics?.quick_history_entries_count ?? '',
+          entry.submission_metrics?.required_core_completed ?? ''
+        ].map(toCsvValue);
+        lines.push(row.join(','));
+      });
+
+      downloadTextFile(
+        `vaccinact-beta-feedback-${new Date().toISOString().slice(0, 10)}.csv`,
+        lines.join('\n'),
+        'text/csv;charset=utf-8'
+      );
+      updateBetaFeedbackStatusFromStorage('Export CSV termine.');
+    });
+
+    document.getElementById('pushBetaFeedbackBtn').addEventListener('click', async () => {
+      const entries = getStoredBetaFeedback();
+      if (entries.length === 0) {
+        updateBetaFeedbackStatusFromStorage('Aucune donnee a envoyer.');
+        return;
+      }
+
+      const status = document.getElementById('betaFeedbackStatus');
+      status.textContent = `Envoi en cours (${entries.length} entree(s))...`;
+
+      try {
+        const response = await fetch('/.netlify/functions/beta-feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ entries })
+        });
+
+        const resultText = await response.text();
+        let result = {};
+        try {
+          result = JSON.parse(resultText);
+        } catch {
+          result = { error: resultText };
+        }
+
+        if (!response.ok) {
+          status.textContent = `Erreur envoi serveur (${response.status}): ${result.error || 'inconnue'}`;
+          return;
+        }
+
+        const accepted = Number(result.accepted_count || 0);
+        const rejected = Number(result.rejected_count || 0);
+        const avgUtility = result.summary?.avg_utility_score;
+        const utilityPart = avgUtility ? ` utilite moyenne=${avgUtility}` : '';
+        status.textContent = `Envoi termine: ${accepted} accepte(s), ${rejected} rejete(s).${utilityPart}`;
+      } catch (error) {
+        status.textContent = `Erreur envoi serveur: ${String(error)}`;
+      }
+    });
+
+    document.getElementById('clearBetaFeedbackBtn').addEventListener('click', () => {
+      setStoredBetaFeedback([]);
+      updateBetaFeedbackStatusFromStorage('Stockage local vide.');
+    });
+
 
     // ===== TOGGLE JSON DEBUG VIEW =====
     document.getElementById('toggleJson').addEventListener('click', () => {
@@ -1916,8 +2312,21 @@
       renderPracticalAdvice(result.practical_advice);
       renderPatientReport(result.patient_report);
       renderGPReport(result.gp_report);
+      renderDeterministicV2(result.deterministic_v2);
       renderLimitations(result.limitations);
       renderReferences(result.references);
+    }
+
+    function renderBetaFeedbackSection() {
+      const section = document.getElementById('betaFeedbackSection');
+      section.style.display = 'block';
+      const status = document.getElementById('betaFeedbackStatus');
+      const completionSeconds = lastSubmissionMetrics?.form_completion_seconds;
+      const baseStatus = completionSeconds
+        ? `Temps de completion mesure: ${completionSeconds}s.`
+        : 'Feedback beta pret a etre renseigne.';
+      const count = getStoredBetaFeedback().length;
+      status.textContent = `${baseStatus} Feedback local: ${count} entree(s).`;
     }
 
     function renderMeta(meta, patientEcho) {
@@ -1937,7 +2346,7 @@
             </div>
             <div class="meta-item">
               <strong>Patient</strong>
-              <div>${patientEcho.patient_age_range || "—"} / ${patientEcho.patient_sex || "—"}</div>
+              <div>${Number.isFinite(Number(patientEcho.patient_age_years)) ? `${patientEcho.patient_age_years} ans` : "—"} / ${patientEcho.patient_sex || "—"}</div>
             </div>
             ${patientEcho.patient_pregnancy_status_or_project
           ? `<div class="meta-item">
@@ -1993,6 +2402,79 @@
         `
         )
         .join("");
+      content.innerHTML = html;
+    }
+
+    function renderDeterministicV2(deterministic) {
+      const section = document.getElementById("deterministicSection");
+      const content = document.getElementById("deterministicContent");
+
+      if (!deterministic || typeof deterministic !== "object") {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+
+      const nowItems = deterministic.action_now || [];
+      const nextItems = deterministic.action_next || [];
+      const cautionItems = deterministic.cautions || [];
+      const assumptions = deterministic.hypotheses_assumed || [];
+      const limitations = deterministic.limitations || [];
+      const refs = deterministic.references || [];
+
+      const renderList = (items, formatter) =>
+        items.length === 0
+          ? "<div class=\"hint\">Aucun element.</div>"
+          : `<ul class="bullet-list">${items.map((item) => `<li>${formatter(item)}</li>`).join("")}</ul>`;
+
+      const html = `
+        <div class="meta-grid" style="margin-bottom: 16px;">
+          <div class="meta-item">
+            <strong>Rules version</strong>
+            <div>${deterministic.meta?.rules_version || "—"}</div>
+          </div>
+          <div class="meta-item">
+            <strong>Coverage</strong>
+            <div>${deterministic.meta?.coverage_status || "—"}</div>
+          </div>
+          <div class="meta-item">
+            <strong>Date</strong>
+            <div>${deterministic.meta?.diagnostic_date_iso || "—"}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Actions maintenant</h3>
+          ${renderList(nowItems, (item) => `${item.vaccine_name || item.label || "Action"} — ${item.rationale || "Sans details"}`)}
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Actions plus tard</h3>
+          ${renderList(nextItems, (item) => `${item.vaccine_name || item.label || "Suivi"} — ${item.proposed_date_iso || "date a definir"} (${item.min_interval_days || 0} jours min)`)}
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Precautions moteur</h3>
+          ${renderList(cautionItems, (item) => `${item.title || "Precaution"} — ${item.details || ""}`)}
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Hypotheses</h3>
+          ${renderList(assumptions, (item) => item)}
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Limitations v2</h3>
+          ${renderList(limitations, (item) => item)}
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">References v2</h3>
+          ${renderList(refs, (item) => `${item.rule_id || "rule"} — ${item.section_hint || item.source_id || "source"}`)}
+        </div>
+      `;
+
       content.innerHTML = html;
     }
 

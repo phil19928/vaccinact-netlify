@@ -62,29 +62,42 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 24px 28px;
-      margin-bottom: 24px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
       box-shadow: var(--shadow-lg);
       text-align: center;
     }
 
+    .page-header-top {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 54px;
+      padding: 0 120px;
+    }
+
     .logo {
-      max-width: 200px;
+      width: 120px;
       height: auto;
-      margin-bottom: 16px;
+      margin: 0;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .page-header-spacer {
+      display: none;
     }
 
     h1 {
       margin: 0;
       font-family: "Fraunces", serif;
-      font-size: 32px;
+      font-size: 28px;
       letter-spacing: 0.2px;
-    }
-
-    .required-note {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 12px;
+      text-align: center;
+      line-height: 1.2;
     }
 
     .required-asterisk {
@@ -144,13 +157,15 @@
     .accordion-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      opacity: 0;
+      transition: max-height 0.32s ease, padding 0.24s ease, opacity 0.2s ease;
       padding: 0 20px;
+      will-change: max-height;
     }
 
     .accordion-content.active {
-      max-height: 5000px;
       padding: 24px 20px;
+      opacity: 1;
     }
 
     fieldset {
@@ -189,6 +204,32 @@
 
     .col-3 {
       grid-column: span 3;
+    }
+
+    .quick-entry-row {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(150px, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .quick-entry-cell {
+      min-width: 0;
+    }
+
+    .quick-entry-row select,
+    .quick-entry-row input[type="date"],
+    .quick-add-btn {
+      min-height: 48px;
+      height: 48px;
+      width: 100%;
+    }
+
+    .quick-add-btn {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     label {
@@ -533,25 +574,6 @@
       vertical-align: -2px;
     }
 
-    /* Payload preview */
-    .payload-preview {
-      background: #1e293b;
-      color: #e2e8f0;
-      border: 1px solid #334155;
-      padding: 16px;
-      border-radius: var(--radius-md);
-      overflow: auto;
-      font-family: ui-monospace, monospace;
-      font-size: 12px;
-      line-height: 1.5;
-      max-height: 400px;
-      display: none;
-    }
-
-    .payload-preview.visible {
-      display: block;
-    }
-
     /* Result Sections */
     .result-container {
       display: none;
@@ -801,16 +823,6 @@
       font-style: italic;
     }
 
-    /* Raw JSON Toggle */
-    .json-wrapper {
-      display: none;
-      margin-top: 20px;
-    }
-
-    .json-wrapper.visible {
-      display: block;
-    }
-
     pre {
       background: #1e293b;
       color: #e2e8f0;
@@ -853,6 +865,15 @@
         grid-template-columns: 1fr;
       }
 
+      .page-header-top {
+        min-height: 48px;
+        padding: 0 88px;
+      }
+
+      .logo {
+        width: 84px;
+      }
+
       .col-12,
       .col-6,
       .col-4,
@@ -886,6 +907,10 @@
 
       .ci-check-label {
         min-height: 0;
+      }
+
+      .quick-entry-row {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -936,9 +961,11 @@
   <div class="container">
     <!-- Header -->
     <div class="page-header">
-      <img src="logo.png" alt="VaccinAct Logo" class="logo" />
-      <h1>Diagnostic Vaccinal</h1>
-      <p class="required-note"><span class="required-asterisk">*</span> Champs obligatoires</p>
+      <div class="page-header-top">
+        <img src="logo.png" alt="VaccinAct Logo" class="logo" />
+        <h1>Diagnostic Vaccinal</h1>
+        <span class="page-header-spacer" aria-hidden="true"></span>
+      </div>
     </div>
 
     <!-- Form -->
@@ -947,11 +974,11 @@
 
         <!-- SECTION MODE RAPIDE -->
         <div class="accordion">
-          <div class="accordion-header active" data-target="quick-section">
+          <div class="accordion-header" data-target="quick-section">
             <span>📝 Informations essentielles</span>
             <span class="accordion-icon">▼</span>
           </div>
-          <div class="accordion-content active" id="quick-section">
+          <div class="accordion-content" id="quick-section">
             <div class="grid">
               <!-- Age exact -->
               <div class="col-4">
@@ -993,66 +1020,28 @@
 
         <!-- SECTION VACCINS (Rapide mode amélioré) -->
         <div class="accordion">
-          <div class="accordion-header active" data-target="vaccines-section">
+          <div class="accordion-header" data-target="vaccines-section">
             <span>💉 Historique vaccinal</span>
             <span class="accordion-icon">▼</span>
           </div>
-          <div class="accordion-content active" id="vaccines-section">
+          <div class="accordion-content" id="vaccines-section">
             <div class="grid">
               <div class="col-12">
-                <label>Mode rapide officine: nom commercial + date</label>
-                <div class="grid">
-                  <div class="col-5">
+                <label>Nom Commercial Vaccin + Date de Administration</label>
+                <div class="quick-entry-row">
+                  <div class="quick-entry-cell">
                     <select id="quick-product-name">
                       <option value="">— Nom commercial —</option>
                     </select>
                   </div>
-                  <div class="col-3">
+                  <div class="quick-entry-cell">
                     <input type="date" id="quick-product-date" />
                   </div>
-                  <div class="col-2">
-                    <select id="quick-product-source">
-                      <option value="declaratif">Déclaratif</option>
-                      <option value="carnet">Carnet</option>
-                      <option value="dmp">DMP</option>
-                      <option value="pharmacie">Officine</option>
-                    </select>
-                  </div>
-                  <div class="col-2">
-                    <button type="button" id="quick-product-add" class="btn-secondary" style="width: 100%;">Ajouter</button>
+                  <div class="quick-entry-cell">
+                    <button type="button" id="quick-product-add" class="btn-secondary quick-add-btn">Ajouter</button>
                   </div>
                 </div>
-                <div class="hint">Ajoutez chaque dose avec sa date réelle. Ce mode alimente `vaccine_history_entries` en v2.</div>
                 <div id="quick-history-list" style="margin-top: 12px;"></div>
-              </div>
-
-              <div class="col-12">
-                <label>Vaccins déjà reçus</label>
-                <div class="chips-container" id="vaccines-chips"></div>
-                <div class="multi-select">
-                  <input type="text" id="vaccines-search" class="multi-select-input"
-                    placeholder="Rechercher un vaccin..." autocomplete="off" />
-                  <div class="multi-select-dropdown" id="vaccines-dropdown">
-                    <div class="multi-select-option" data-value="DTP">DTP / dTPolio</div>
-                    <div class="multi-select-option" data-value="dTcaPolio">dTcaPolio (coqueluche)</div>
-                    <div class="multi-select-option" data-value="ROR">ROR (Rougeole-Oreillons-Rubéole)</div>
-                    <div class="multi-select-option" data-value="Hepatite_B">Hépatite B</div>
-                    <div class="multi-select-option" data-value="HPV">HPV (Papillomavirus)</div>
-                    <div class="multi-select-option" data-value="Grippe">Grippe</div>
-                    <div class="multi-select-option" data-value="Covid19">Covid-19</div>
-                    <div class="multi-select-option" data-value="Pneumocoque">Pneumocoque</div>
-                    <div class="multi-select-option" data-value="Meningocoque_ACWY">Méningocoques ACWY</div>
-                    <div class="multi-select-option" data-value="Meningocoque_B">Méningocoques B</div>
-                    <div class="multi-select-option" data-value="Varicelle">Varicelle</div>
-                    <div class="multi-select-option" data-value="Zona">Zona</div>
-                    <div class="multi-select-option" data-value="BCG">BCG</div>
-                    <div class="multi-select-option" data-value="VRS">VRS</div>
-                    <div class="multi-select-option" data-value="Hepatite_A">Hépatite A</div>
-                    <div class="multi-select-option" data-value="Fievre_jaune">Fièvre jaune</div>
-                    <div class="multi-select-option" data-value="Autre">Autre</div>
-                  </div>
-                </div>
-                <div class="hint">Sélectionnez les vaccins, puis indiquez le nombre de doses pour chacun</div>
               </div>
 
               <!-- Statut historique -->
@@ -1066,35 +1055,6 @@
                   <option value="incertain">Incertain</option>
                   <option value="autre">Autre</option>
                 </select>
-              </div>
-
-              <!-- Source info -->
-              <div class="col-6">
-                <label for="vax-source">Source de l'information</label>
-                <select id="vax-source">
-                  <option value="">— Sélectionner —</option>
-                  <option value="carnet">Carnet de vaccination</option>
-                  <option value="dmp">DMP / Dossier médical</option>
-                  <option value="declaratif">Déclaratif patient</option>
-                  <option value="pharmacie">Historique officine</option>
-                  <option value="autre">Autre</option>
-                </select>
-              </div>
-
-              <!-- Vaccins à l'étranger -->
-              <div class="col-6">
-                <label for="vax-abroad">Vaccins réalisés à l'étranger</label>
-                <select id="vax-abroad">
-                  <option value="">— Sélectionner —</option>
-                  <option value="non">Non</option>
-                  <option value="oui">Oui</option>
-                  <option value="inconnu">Inconnu</option>
-                </select>
-              </div>
-
-              <div class="col-6" id="abroad-country-wrapper" style="display: none;">
-                <label for="abroad-country">Pays des vaccinations</label>
-                <input type="text" id="abroad-country" placeholder="Ex: États-Unis, Maroc..." />
               </div>
 
               <!-- Tolérance -->
@@ -1324,21 +1284,9 @@
         <!-- Actions -->
         <div class="actions">
           <button id="submitBtn" type="submit">🔍 Lancer le diagnostic</button>
-          <button id="previewBtn" type="button" class="btn-secondary">👁️ Aperçu payload</button>
           <span id="status" class="status-text"></span>
         </div>
         <div id="formError" class="form-error" role="alert" aria-live="polite"></div>
-
-        <!-- Payload Preview -->
-        <div class="accordion" style="margin-top: 20px;">
-          <div class="accordion-header" data-target="payload-section">
-            <span>🔍 Aperçu du payload (debug)</span>
-            <span class="accordion-icon">▼</span>
-          </div>
-          <div class="accordion-content" id="payload-section">
-            <pre id="payloadPreview" class="payload-preview"></pre>
-          </div>
-        </div>
 
       </form>
     </div>
@@ -1353,6 +1301,18 @@
       <div class="section" id="metaSection">
         <h2 class="section-title"><span class="emoji">ℹ️</span> Informations du diagnostic</h2>
         <div id="metaContent"></div>
+      </div>
+
+      <!-- Pharmacist Report -->
+      <div class="section" id="pharmacistReportSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">🧾</span> Résumé pour le pharmacien</h2>
+        <div id="pharmacistReportContent"></div>
+      </div>
+
+      <!-- Patient Report -->
+      <div class="section" id="patientReportSection" style="display: none">
+        <h2 class="section-title"><span class="emoji">👤</span> Résumé pour le patient</h2>
+        <div id="patientReportContent"></div>
       </div>
 
       <!-- Recommended Vaccines -->
@@ -1377,18 +1337,6 @@
       <div class="section" id="adviceSection" style="display: none">
         <h2 class="section-title"><span class="emoji">💡</span> Conseils pratiques</h2>
         <div id="adviceContent"></div>
-      </div>
-
-      <!-- Patient Report -->
-      <div class="section" id="patientReportSection" style="display: none">
-        <h2 class="section-title"><span class="emoji">👤</span> Résumé pour le patient</h2>
-        <div id="patientReportContent"></div>
-      </div>
-
-      <!-- GP Report -->
-      <div class="section" id="gpReportSection" style="display: none">
-        <h2 class="section-title"><span class="emoji">🩺</span> Résumé pour le médecin traitant</h2>
-        <div id="gpReportContent"></div>
       </div>
 
       <!-- Deterministic Engine Debug -->
@@ -1447,13 +1395,6 @@
         <div id="referencesContent"></div>
       </div>
 
-      <!-- Raw JSON Toggle -->
-      <div class="section">
-        <button id="toggleJson" class="secondary">Voir JSON brut (debug)</button>
-        <div id="jsonWrapper" class="json-wrapper">
-          <pre id="rawJson"></pre>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1687,13 +1628,6 @@
     }
 
     // Initialize components
-    const vaccinesMultiSelect = new MultiSelect(
-      'vaccines-search',
-      'vaccines-dropdown',
-      'vaccines-chips',
-      { showDoses: true }
-    );
-
     const formElement = document.getElementById('vaccinForm');
     ['input', 'change', 'focusin'].forEach((eventName) => {
       formElement.addEventListener(eventName, startFormSessionIfNeeded);
@@ -1748,7 +1682,7 @@
     function renderQuickHistoryEntries() {
       const list = document.getElementById('quick-history-list');
       if (quickHistoryEntries.length === 0) {
-        list.innerHTML = '<div class="hint">Aucune entree rapide.</div>';
+        list.innerHTML = '';
         return;
       }
 
@@ -1756,7 +1690,6 @@
         <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px; padding:8px 10px; border:1px solid #e5e7eb; border-radius:10px; background:#fff;">
           <strong>${entry.product_name}</strong>
           <span class="hint" style="margin:0;">${entry.administration_date_iso || 'date manquante'}</span>
-          <span class="hint" style="margin:0;">source: ${entry.source || 'declaratif'}</span>
           <button type="button" data-index="${index}" class="quick-entry-remove btn-secondary" style="margin-left:auto; padding:4px 8px;">Retirer</button>
         </div>
       `).join('');
@@ -1773,7 +1706,6 @@
     document.getElementById('quick-product-add').addEventListener('click', () => {
       const productName = document.getElementById('quick-product-name').value;
       const dateIso = document.getElementById('quick-product-date').value;
-      const source = document.getElementById('quick-product-source').value || 'declaratif';
 
       if (!productName || !dateIso) {
         alert('Renseignez un nom commercial et une date.');
@@ -1782,8 +1714,7 @@
 
       quickHistoryEntries.push({
         product_name: productName,
-        administration_date_iso: dateIso,
-        source
+        administration_date_iso: dateIso
       });
 
       document.getElementById('quick-product-name').value = '';
@@ -1792,17 +1723,85 @@
     });
     renderQuickHistoryEntries();
 
-    // ===== ACCORDION =====
-    document.querySelectorAll('.accordion-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const targetId = header.dataset.target;
-        const content = document.getElementById(targetId);
-        const isActive = header.classList.contains('active');
+    // ===== ACCORDION (exclusive + all closed by default) =====
+    const accordionHeaders = Array.from(document.querySelectorAll('.accordion-header'));
 
-        header.classList.toggle('active');
-        content.classList.toggle('active');
+    function getAccordionContent(header) {
+      if (!header?.dataset?.target) return null;
+      return document.getElementById(header.dataset.target);
+    }
+
+    function closeAccordion(header, animate = true) {
+      const content = getAccordionContent(header);
+      if (!content) return;
+
+      if (!animate) {
+        header.classList.remove('active');
+        content.classList.remove('active');
+        content.style.maxHeight = '0px';
+        return;
+      }
+
+      if (content.style.maxHeight === 'none' || !content.style.maxHeight) {
+        content.style.maxHeight = `${content.scrollHeight}px`;
+        void content.offsetHeight;
+      }
+
+      header.classList.remove('active');
+      content.classList.remove('active');
+      content.style.maxHeight = '0px';
+    }
+
+    function openAccordion(header, animate = true) {
+      const content = getAccordionContent(header);
+      if (!content) return;
+
+      header.classList.add('active');
+      content.classList.add('active');
+
+      if (!animate) {
+        content.style.maxHeight = '0px';
+        void content.offsetHeight;
+        content.style.maxHeight = `${content.scrollHeight}px`;
+        return;
+      }
+
+      content.style.maxHeight = '0px';
+      requestAnimationFrame(() => {
+        content.style.maxHeight = `${content.scrollHeight}px`;
+      });
+    }
+
+    accordionHeaders.forEach((header) => {
+      const content = getAccordionContent(header);
+      if (!content) return;
+
+      content.addEventListener('transitionend', (event) => {
+        if (event.propertyName === 'max-height' && header.classList.contains('active')) {
+          content.style.maxHeight = 'none';
+        }
+      });
+
+      header.addEventListener('click', () => {
+        const isOpen = header.classList.contains('active');
+
+        if (isOpen) {
+          closeAccordion(header, true);
+          return;
+        }
+
+        accordionHeaders.forEach((otherHeader) => {
+          if (otherHeader !== header) {
+            closeAccordion(otherHeader, true);
+          }
+        });
+
+        openAccordion(header, true);
       });
     });
+
+    // Force all accordions closed on initial load.
+    accordionHeaders.forEach((header) => closeAccordion(header, false));
 
     // ===== SEGMENTED CONTROLS =====
     document.querySelectorAll('.segmented-control').forEach(control => {
@@ -1816,12 +1815,6 @@
     });
 
     // ===== CONDITIONAL FIELDS =====
-    // Vaccines abroad country
-    document.getElementById('vax-abroad').addEventListener('change', (e) => {
-      document.getElementById('abroad-country-wrapper').style.display =
-        e.target.value === 'oui' ? 'block' : 'none';
-    });
-
     // Vaccine tolerance details
     document.getElementById('vax-tolerance').addEventListener('change', (e) => {
       const showDetails = ['allergie', 'anaphylaxie', 'autre'].includes(e.target.value);
@@ -1838,22 +1831,16 @@
 
     // ===== PAYLOAD BUILDER =====
     function buildPayload() {
-      // Get selected vaccines with doses
-      const vaccinesWithDoses = vaccinesMultiSelect.getSelectedWithDoses();
-      const vaccinesList = Object.keys(vaccinesWithDoses);
-
-      // Build vaccines string
-      const doseByName = { ...vaccinesWithDoses };
+      // Build vaccine doses summary from quick entries
+      const doseByName = {};
       quickHistoryEntries.forEach((entry) => {
-        const existing = doseByName[entry.product_name];
-        if (!existing) {
-          doseByName[entry.product_name] = '1';
+        if (!entry?.product_name) return;
+        const existing = Number.parseInt(doseByName[entry.product_name] || '0', 10);
+        if (Number.isFinite(existing)) {
+          doseByName[entry.product_name] = String(existing + 1);
           return;
         }
-        const parsed = Number.parseInt(existing, 10);
-        if (Number.isFinite(parsed)) {
-          doseByName[entry.product_name] = String(parsed + 1);
-        }
+        doseByName[entry.product_name] = '1';
       });
       const vaccinesStr = Object.entries(doseByName).map(([vaccine, dose]) => `${vaccine}: ${dose}`).join('; ');
 
@@ -1897,14 +1884,6 @@
         if (allergyDetails) allergyStr += ': ' + allergyDetails;
       }
 
-      // Vaccines abroad
-      const vaxAbroad = document.getElementById('vax-abroad').value;
-      let vaxAbroadStr = vaxAbroad;
-      if (vaxAbroad === 'oui') {
-        const country = document.getElementById('abroad-country').value.trim();
-        if (country) vaxAbroadStr += ' (' + country + ')';
-      }
-
       // Tolerance
       const tolerance = document.getElementById('vax-tolerance').value;
       let toleranceStr = tolerance;
@@ -1940,10 +1919,10 @@
         vax_history_last_injection_date_per_vaccine: vaxHistoryLastInjectionDatePerVaccine,
         vax_history_tolerance_adverse_events: toleranceStr,
         vax_history_status_uncertainty: document.getElementById('vax-status').value,
-        vax_history_vaccines_done_abroad: vaxAbroadStr,
+        vax_history_vaccines_done_abroad: '',
         vax_history_other_flag: false,
         vax_history_other_details: '',
-        vax_history_how_information_collected_today: document.getElementById('vax-source').value,
+        vax_history_how_information_collected_today: document.getElementById('vax-status').value,
         vaccine_history_entries: quickHistoryEntries.map(entry => ({ ...entry })),
 
         // CI checks
@@ -2005,23 +1984,6 @@
         beta_metrics: betaMetrics
       };
     }
-
-    // ===== PREVIEW PAYLOAD =====
-    document.getElementById('previewBtn').addEventListener('click', () => {
-      const payload = buildPayloadBundle({ form_completed: false });
-      const preview = document.getElementById('payloadPreview');
-      preview.textContent = JSON.stringify(payload, null, 2);
-      preview.classList.add('visible');
-
-      // Expand payload section
-      const payloadHeader = document.querySelector('[data-target="payload-section"]');
-      const payloadContent = document.getElementById('payload-section');
-      payloadHeader.classList.add('active');
-      payloadContent.classList.add('active');
-
-      // Scroll to preview
-      preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
 
     function resolveDiagnosticApiUrl() {
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -2087,7 +2049,6 @@
       const submitBtn = document.getElementById('submitBtn');
       const statusEl = document.getElementById('status');
       const resultContainer = document.getElementById('resultContainer');
-      const rawJsonEl = document.getElementById('rawJson');
 
       setSubmitLoading(submitBtn, true);
       setFormError('');
@@ -2120,7 +2081,6 @@
 
           renderDiagnostic(result);
           renderBetaFeedbackSection();
-          rawJsonEl.textContent = JSON.stringify(result, null, 2);
           resultContainer.style.display = 'block';
           resultContainer.scrollIntoView({ behavior: 'smooth' });
 
@@ -2132,7 +2092,6 @@
             setFormError(`Le serveur a répondu avec une erreur: ${apiError}.`);
           }
         } else {
-          rawJsonEl.textContent = parsed.text;
           resultContainer.style.display = 'block';
           statusEl.textContent = `❌ Réponse non JSON (HTTP ${response.status})`;
           setFormError(
@@ -2148,7 +2107,6 @@
           });
         }
       } catch (err) {
-        rawJsonEl.textContent = String(err);
         resultContainer.style.display = 'block';
         statusEl.textContent = '❌ Erreur réseau';
         setFormError(`Impossible de joindre l’API diagnostic (${String(err)}).`);
@@ -2291,26 +2249,18 @@
       updateBetaFeedbackStatusFromStorage('Stockage local vide.');
     });
 
-
-    // ===== TOGGLE JSON DEBUG VIEW =====
-    document.getElementById('toggleJson').addEventListener('click', () => {
-      const wrapper = document.getElementById('jsonWrapper');
-      wrapper.classList.toggle('visible');
-    });
-
-
     // === RENDERING FUNCTIONS ===
 
     function renderDiagnostic(result) {
       renderMeta(result.meta, result.patient_input_echo);
+      renderPharmacistReport(result);
+      renderPatientReport(result.patient_report);
       renderRecommendedVaccines(result.recommended_vaccines);
       renderCatchupSchedule(result.catchup_schedule);
       renderContraindications(result.contraindications_and_precautions);
       renderPracticalAdvice(result.practical_advice);
-      renderPatientReport(result.patient_report);
-      renderGPReport(result.gp_report);
       renderDeterministicV2(result.deterministic_v2);
-      renderLimitations(result.limitations);
+      renderLimitations(result.limitations, result.meta);
       renderReferences(result.references);
     }
 
@@ -2376,7 +2326,10 @@
       section.style.display = "block";
       const html = vaccines
         .map(
-          (v) => `
+          (v) => {
+            const allowedInPharmacy = formatRegulatoryFieldValue(v.allowed_in_pharmacy);
+            const administerableBy = formatRegulatoryFieldValue(v.administerable_by);
+            return `
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">${v.vaccine_name}</h3>
@@ -2384,8 +2337,8 @@
             </div>
             <div class="card-content">
               <p><strong>Timing:</strong> ${v.timing_label}</p>
-              <p><strong>Autorisé en officine:</strong> ${v.allowed_in_pharmacy}</p>
-              <p><strong>Administrable par:</strong> ${v.administerable_by}</p>
+              ${allowedInPharmacy ? `<p><strong>Autorisé en officine:</strong> ${allowedInPharmacy}</p>` : ""}
+              ${administerableBy ? `<p><strong>Administrable par:</strong> ${administerableBy}</p>` : ""}
               ${v.vigilance_points && v.vigilance_points.length > 0
               ? `<p><strong>Points de vigilance:</strong></p>
                      <ul class="bullet-list">
@@ -2396,7 +2349,8 @@
               ${renderSources(v.sources)}
             </div>
           </div>
-        `
+        `;
+          }
         )
         .join("");
       content.innerHTML = html;
@@ -2598,11 +2552,45 @@
       content.innerHTML = html;
     }
 
-    function renderGPReport(report) {
-      const section = document.getElementById("gpReportSection");
-      const content = document.getElementById("gpReportContent");
+    function renderPharmacistReport(result) {
+      const section = document.getElementById("pharmacistReportSection");
+      const content = document.getElementById("pharmacistReportContent");
+      const report = result?.gp_report;
+      const recommendedVaccines = Array.isArray(result?.recommended_vaccines) ? result.recommended_vaccines : [];
+      const catchupSchedule = Array.isArray(result?.catchup_schedule) ? result.catchup_schedule : [];
+      const precautions = Array.isArray(result?.contraindications_and_precautions) ? result.contraindications_and_precautions : [];
 
-      if (!report || !report.bullets || report.bullets.length === 0) {
+      const bullets = [];
+      if (Array.isArray(report?.bullets) && report.bullets.length > 0) {
+        bullets.push(...report.bullets);
+      }
+
+      if (recommendedVaccines.length > 0) {
+        const actionable = recommendedVaccines
+          .map((item) => item?.vaccine_name)
+          .filter(Boolean);
+        if (actionable.length > 0) {
+          bullets.unshift(`Décision officine: ${actionable.slice(0, 3).join(", ")}${actionable.length > 3 ? " (+ autres recommandations)" : ""}.`);
+        }
+      }
+
+      if (catchupSchedule.length > 0) {
+        bullets.push(`Rattrapage structuré disponible: ${catchupSchedule.length} étape(s) planifiée(s).`);
+      }
+
+      if (precautions.length > 0) {
+        bullets.push("Vérifier les précautions et contre-indications avant administration.");
+      }
+
+      const hasRegulatoryUnknown = recommendedVaccines.some((item) =>
+        isRegulatoryUnknownValue(item?.allowed_in_pharmacy) || isRegulatoryUnknownValue(item?.administerable_by)
+      );
+      if (hasRegulatoryUnknown) {
+        bullets.push("Administrabilité en officine: à vérifier selon réglementation en vigueur pour certains actes.");
+      }
+
+      const uniqueBullets = [...new Set(bullets.map((item) => String(item || "").trim()).filter(Boolean))];
+      if (uniqueBullets.length === 0) {
         section.style.display = "none";
         return;
       }
@@ -2610,17 +2598,17 @@
       section.style.display = "block";
       const html = `
           <div class="card">
-            <h3 class="card-title">${report.title || "Résumé professionnel"}</h3>
+            <h3 class="card-title">Résumé opérationnel officine</h3>
             <ul class="bullet-list">
-              ${report.bullets.map((b) => `<li>${b}</li>`).join("")}
+              ${uniqueBullets.map((b) => `<li>${b}</li>`).join("")}
             </ul>
-            ${renderSources(report.sources)}
+            ${renderSources(report?.sources)}
           </div>
         `;
       content.innerHTML = html;
     }
 
-    function renderLimitations(limitations) {
+    function renderLimitations(limitations, meta) {
       const section = document.getElementById("limitationsSection");
       const content = document.getElementById("limitationsContent");
 
@@ -2632,7 +2620,8 @@
       section.style.display = "block";
       const html = `
           <div class="alert alert-warning">
-            <div class="alert-title">Informations non trouvées dans le document source</div>
+            <div class="alert-title">Cadre d’interprétation</div>
+            <p>Les recommandations ci-dessus sont basées uniquement sur les informations renseignées et les extraits du calendrier vaccinal version ${meta?.version || "—"}.</p>
             <ul class="bullet-list">
               ${limitations.map((l) => `<li>${l}</li>`).join("")}
             </ul>
@@ -2699,6 +2688,23 @@
       return inline
         ? `<div style="margin-top: 8px; font-size: 12px; color: var(--light-text);">${items}</div>`
         : `<div class="sources"><div class="sources-label">Sources</div>${items}</div>`;
+    }
+
+    function isRegulatoryUnknownValue(value) {
+      const normalized = String(value || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+      return normalized.includes("non_precise_dans_source") || normalized === "non_precise";
+    }
+
+    function formatRegulatoryFieldValue(value) {
+      if (value === null || value === undefined || String(value).trim() === "") return "";
+      if (isRegulatoryUnknownValue(value)) {
+        return "À vérifier selon réglementation en vigueur";
+      }
+      return String(value);
     }
 
     function formatDate(isoDate) {

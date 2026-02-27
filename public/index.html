@@ -375,35 +375,70 @@
     }
 
     /* Segmented control (Yes/No/Unknown) */
+    .ci-checklist {
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fcfdfd;
+    }
+
+    .ci-checklist legend {
+      padding: 0 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .ci-checklist-hint {
+      margin: 4px 0 14px;
+      font-size: 13px;
+      color: var(--light-text);
+    }
+
+    .ci-check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    .ci-check-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 10px;
+    }
+
+    .ci-check-label {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.35;
+      min-height: 34px;
+      color: var(--text);
+    }
+
     .segmented-control {
-      display: inline-flex;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: 100%;
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
       background: white;
     }
 
-    .ci-check-row {
-      display: grid;
-      grid-template-columns: minmax(230px, 300px) 1fr;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .ci-check-label {
-      margin: 0;
-    }
-
     .segmented-option {
-      padding: 8px 16px;
+      min-height: 36px;
       border: none;
+      border-right: 1px solid var(--border-light);
       background: white;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
       transition: all 0.2s ease;
-      border-right: 1px solid var(--border-light);
     }
 
     .segmented-option:last-child {
@@ -845,8 +880,12 @@
         width: 100%;
       }
 
-      .ci-check-row {
+      .ci-check-grid {
         grid-template-columns: 1fr;
+      }
+
+      .ci-check-label {
+        min-height: 0;
       }
     }
 
@@ -948,26 +987,6 @@
                 </select>
               </div>
 
-              <!-- Profession multi-select -->
-              <div class="col-12">
-                <label>Profession / Exposition aux risques</label>
-                <div class="chips-container" id="profession-chips"></div>
-                <div class="multi-select">
-                  <input type="text" id="profession-search" class="multi-select-input"
-                    placeholder="Rechercher et sélectionner..." autocomplete="off" />
-                  <div class="multi-select-dropdown" id="profession-dropdown">
-                    <div class="multi-select-option" data-value="soignant">Soignant</div>
-                    <div class="multi-select-option" data-value="creche">Crèche / Petite enfance</div>
-                    <div class="multi-select-option" data-value="ehpad">EHPAD</div>
-                    <div class="multi-select-option" data-value="laboratoire">Laboratoire / Biomédical</div>
-                    <div class="multi-select-option" data-value="contact_immuno">Contact immunodéprimés</div>
-                    <div class="multi-select-option" data-value="contact_animaux">Contact animaux</div>
-                    <div class="multi-select-option" data-value="autre">Autre</div>
-                  </div>
-                </div>
-                <input type="text" id="profession-autre" placeholder="Précisez..."
-                  style="display: none; margin-top: 12px;" />
-              </div>
             </div>
           </div>
         </div>
@@ -1241,55 +1260,54 @@
 
               <!-- Checklist CI avec segmented controls -->
               <div class="col-12">
-                <fieldset>
+                <fieldset class="ci-checklist">
                   <legend>Vérification contre-indications</legend>
+                  <p class="ci-checklist-hint">Sélectionnez le statut pour chaque point.</p>
 
-                  <div class="ci-check-row">
-                    <label class="ci-check-label">Anticoagulants</label>
-                    <div class="segmented-control" data-field="ci-anticoag">
-                      <button type="button" class="segmented-option" data-value="non">Non</button>
-                      <button type="button" class="segmented-option active" data-value="oui">Oui</button>
-                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                  <div class="ci-check-grid">
+                    <div class="ci-check-row">
+                      <label class="ci-check-label">Anticoagulants</label>
+                      <div class="segmented-control" data-field="ci-anticoag">
+                        <button type="button" class="segmented-option active" data-value="non">Non</button>
+                        <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                        <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="ci-check-row">
-                    <label class="ci-check-label">Immunosuppression /
-                      Immunodépression</label>
-                    <div class="segmented-control" data-field="ci-immuno">
-                      <button type="button" class="segmented-option active" data-value="non">Non</button>
-                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
-                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    <div class="ci-check-row">
+                      <label class="ci-check-label">Immunosuppression / Immunodépression</label>
+                      <div class="segmented-control" data-field="ci-immuno">
+                        <button type="button" class="segmented-option active" data-value="non">Non</button>
+                        <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                        <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="ci-check-row">
-                    <label class="ci-check-label">Allergie sévère /
-                      Anaphylaxie</label>
-                    <div class="segmented-control" data-field="ci-allergy">
-                      <button type="button" class="segmented-option active" data-value="non">Non</button>
-                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
-                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    <div class="ci-check-row">
+                      <label class="ci-check-label">Allergie sévère / Anaphylaxie</label>
+                      <div class="segmented-control" data-field="ci-allergy">
+                        <button type="button" class="segmented-option active" data-value="non">Non</button>
+                        <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                        <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="ci-check-row">
-                    <label class="ci-check-label">Réaction sévère
-                      post-vaccinale</label>
-                    <div class="segmented-control" data-field="ci-postrxn">
-                      <button type="button" class="segmented-option active" data-value="non">Non</button>
-                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
-                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    <div class="ci-check-row">
+                      <label class="ci-check-label">Réaction sévère post-vaccinale</label>
+                      <div class="segmented-control" data-field="ci-postrxn">
+                        <button type="button" class="segmented-option active" data-value="non">Non</button>
+                        <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                        <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="ci-check-row">
-                    <label class="ci-check-label">Pathologie neurologique
-                      progressive</label>
-                    <div class="segmented-control" data-field="ci-neuro">
-                      <button type="button" class="segmented-option active" data-value="non">Non</button>
-                      <button type="button" class="segmented-option" data-value="oui">Oui</button>
-                      <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                    <div class="ci-check-row">
+                      <label class="ci-check-label">Pathologie neurologique progressive</label>
+                      <div class="segmented-control" data-field="ci-neuro">
+                        <button type="button" class="segmented-option active" data-value="non">Non</button>
+                        <button type="button" class="segmented-option" data-value="oui">Oui</button>
+                        <button type="button" class="segmented-option" data-value="inconnu">Inconnu</button>
+                      </div>
                     </div>
                   </div>
                 </fieldset>
@@ -1669,12 +1687,6 @@
     }
 
     // Initialize components
-    const professionMultiSelect = new MultiSelect(
-      'profession-search',
-      'profession-dropdown',
-      'profession-chips'
-    );
-
     const vaccinesMultiSelect = new MultiSelect(
       'vaccines-search',
       'vaccines-dropdown',
@@ -1804,12 +1816,6 @@
     });
 
     // ===== CONDITIONAL FIELDS =====
-    // Profession autre
-    professionMultiSelect.searchInput.addEventListener('input', () => {
-      const hasAutre = professionMultiSelect.getSelectedValues().includes('autre');
-      document.getElementById('profession-autre').style.display = hasAutre ? 'block' : 'none';
-    });
-
     // Vaccines abroad country
     document.getElementById('vax-abroad').addEventListener('change', (e) => {
       document.getElementById('abroad-country-wrapper').style.display =
@@ -1863,15 +1869,6 @@
         .join('; ');
 
       const ageYears = Number.parseInt(document.getElementById('patient_age_years').value, 10);
-
-      // Build profession string
-      const professionValues = professionMultiSelect.getSelectedValues();
-      let professionStr = professionValues.filter(v => v !== 'autre').join(', ');
-      const autreProf = document.getElementById('profession-autre').value.trim();
-      if (professionValues.includes('autre') && autreProf) {
-        professionStr += (professionStr ? ', ' : '') + autreProf;
-      }
-      if (!professionStr) professionStr = '';
 
       // Chronic conditions
       const chronicChecked = Array.from(document.querySelectorAll('#chronic-conditions input:checked'))
@@ -1929,7 +1926,7 @@
         patient_age_years: Number.isFinite(ageYears) ? ageYears : null,
         patient_sex: document.getElementById('patient_sex').value,
         patient_pregnancy_status_or_project: document.getElementById('patient_pregnancy').value,
-        patient_profession_risk_exposure: professionStr,
+        patient_profession_risk_exposure: '',
         patient_travel_plan_country_date: '',
 
         // Medical context
